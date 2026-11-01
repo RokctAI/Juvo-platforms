@@ -4,10 +4,10 @@
   "app_type": "deliveryplatform",
   "protocol": {
     "git": "https://github.com/RokctAI/The-Rokct-Protocol",
-    "ref": "2468f0a0ec20b9fc5dc2a9c8c36ef149bbb9d50e",
+    "ref": "479d6f750b25064244d9d9aaa84673945520a17d",
     "vendored": ".rokct/cache/_composer",
     "files": {
-      "sdk_composer.py": "4188e85c1b8be88d5f16bb4a63e46ba0789b685ce8d674d28b048cf4de60043f",
+      "sdk_composer.py": "6f4e8762012ec10fd5ce8a689432a6d698be5e9f4e7a77f9c327eb9ff58eddd5",
       "sdk_installer_base.py": "3ce332833c2bac2d2e08bb75a024d40e62a3f1f46cf72c9be4eb64ee61f10e60"
     }
   },
@@ -19,10 +19,10 @@
       "git": "https://github.com/RokctAI/core",
       "path": "../core/base/nextjs",
       "ref": "main",
-      "commit": "6b07dc1c6845f8a8ffdf9cf5065921d408439ef0",
-      "version": "1.21.0",
+      "commit": "dae62070bc3bc9459eba8c746ffee314df7e6c72",
+      "version": "1.48.0",
       "install_py_sha256": "b6c434a1c05611d29f1018f68b9423383f7ecfbf9cc1efe74825ba6c4df98fff",
-      "content_sha256": "b2fcd7a66688303c7d37fe4eacdf9f462193cd4b0659e24de546b6a9c37d065b"
+      "content_sha256": "466ca87f59cd39598f3778132d98400d6dadf1096093b95b10c4af6996b44188"
     },
     {
       "name": "auth_sdk",
@@ -31,10 +31,10 @@
       "git": "https://github.com/RokctAI/users",
       "path": "../users/auth/nextjs",
       "ref": "main",
-      "commit": "0e865f21f1df66dcd95b63bd1d34080d50f0fd8b",
-      "version": "1.7.1",
+      "commit": "69c2b0c5eb7ed03a3a8aacd63cfc5d5f861358eb",
+      "version": "1.7.3",
       "install_py_sha256": "b9b0d4156a68d46f528be2b885eed17cc7dba21f6b4b48b2991ba2c3274ae21b",
-      "content_sha256": "1c758cdec101e100f88121eee2f2e5624653bf0f03186ba34f7fc09ed86001c5"
+      "content_sha256": "f121718d6c6fede908721c4860a6b7b584afd87fd37d63f6c84529d0baadd418"
     },
     {
       "name": "telemetry_sdk",
@@ -43,7 +43,7 @@
       "git": "https://github.com/RokctAI/core",
       "path": "../core/telemetry/nextjs",
       "ref": "main",
-      "commit": "6b07dc1c6845f8a8ffdf9cf5065921d408439ef0",
+      "commit": "dae62070bc3bc9459eba8c746ffee314df7e6c72",
       "version": "1.2.0",
       "install_py_sha256": "318d20eb7123ffaa549618d06b4530dfce5df9ba0b07df2328c0c6e1738e36c4",
       "content_sha256": "79628f311222b638a98c8357e0d947936ba4b7b247361545d88d2da5be767396"
@@ -55,7 +55,7 @@
       "git": "https://github.com/RokctAI/commerce",
       "path": "../commerce/products/nextjs",
       "ref": "main",
-      "commit": "c31c2b43ca093c679bc232b0d2c7f75548984716",
+      "commit": "0b7b9f8648ce13d466b813fc6acba7fd5f2ce6d7",
       "version": "1.2.0",
       "install_py_sha256": "8d8a6adbaf6b4ce47fa5d2f194708562dff393b457a0a68abd88649c2df4561c",
       "content_sha256": "e45e1925fcd20eee5a7be3841028feeb7712cbed848b19c485a9608630804186"
@@ -67,10 +67,10 @@
       "git": "https://github.com/RokctAI/zones",
       "path": "../zones/delivery/nextjs",
       "ref": "main",
-      "commit": "d9030137390e08f4f0079f379a11190699ec7821",
-      "version": "1.0.1",
+      "commit": "2d19532b2dbf6eae424f5cf9dd8f101117914e39",
+      "version": "1.1.1",
       "install_py_sha256": "8ca4ef31c258f0ac3fca917f875522a5714cbcb410bf5a803cf5a648e2d3caed",
-      "content_sha256": "1788c69014bd5f484921a006f8a89dc6093238f77ed7f4eb93db03b23a4d2add"
+      "content_sha256": "f283809a6a2ef93754e664658c061cb2a86955227e41040a6893e3dfa9d7aca6"
     }
   ]
 }

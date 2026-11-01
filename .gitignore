@@ -37,6 +37,12 @@ npm-debug.log*
 # tracked regardless of an ignore rule; the lock's content_sha256 fails the
 # build loudly if a cache entry is ever incomplete or edited.
 .rokct/cache/
+# The install record `scripts/compose.sh` writes on every compose: this
+# machine's own file digests, regenerated each run, never vendored. It sits
+# inside .rokct/cache/ which the refresh stages with `git add -f`, so it is
+# named here to keep that force-add from sweeping it into a commit - a
+# committed copy drifts on the very next compose and fails the zero-drift check.
+.rokct/cache/install_state.json
 .rokct/sdk_installer_base.py
 .rokct/agent/logs/
 
@@ -54,6 +60,7 @@ npm-debug.log*
 /app/(auth)/auth.config.ts
 /app/(auth)/auth.ts
 /app/(auth)/forgot-password/page.tsx
+/app/(auth)/login/brand-heading.ts
 /app/(auth)/login/login-view.tsx
 /app/(auth)/login/page.tsx
 /app/(auth)/register-link.ts
@@ -70,7 +77,10 @@ npm-debug.log*
 /app/actions/base/admin/settings.ts
 /app/actions/base/admin/system.ts
 /app/actions/base/landing.ts
+/app/actions/base/legal.ts
+/app/actions/base/network-sites.ts
 /app/actions/base/status.ts
+/app/actions/delivery/admin/location-types.ts
 /app/actions/products/admin/products.ts
 /app/actions/products/brands.ts
 /app/actions/products/categories.ts
@@ -88,6 +98,7 @@ npm-debug.log*
 /app/admin/content/brands/page.tsx
 /app/admin/content/faqs/page.tsx
 /app/admin/content/gallery/page.tsx
+/app/admin/logistics/location-types/page.tsx
 /app/admin/page.tsx
 /app/admin/products/categories/page.tsx
 /app/admin/products/extras/page.tsx
@@ -153,16 +164,22 @@ npm-debug.log*
 /components/custom/app-sidebar.tsx
 /components/custom/auth-form.tsx
 /components/custom/auth/register-registry.ts
+/components/custom/back-to-top.tsx
 /components/custom/beta-toggle.tsx
 /components/custom/delivery-apps-section.tsx
 /components/custom/delivery-features-section.tsx
 /components/custom/delivery-pricing-section.tsx
+/components/custom/download-buttons.tsx
 /components/custom/footer-chrome.tsx
 /components/custom/header-menu.tsx
 /components/custom/header.tsx
+/components/custom/hero-view.tsx
 /components/custom/hero.tsx
 /components/custom/image-upload.tsx
+/components/custom/install-offer.tsx
 /components/custom/landing-content.tsx
+/components/custom/landing/back-to-top.ts
+/components/custom/landing/brand-marks.ts
 /components/custom/landing/delivery-apps.ts
 /components/custom/landing/delivery-header-menu.ts
 /components/custom/landing/delivery-hero-copy.ts
@@ -170,26 +187,39 @@ npm-debug.log*
 /components/custom/landing/delivery-page-sections.ts
 /components/custom/landing/delivery-plans-query.ts
 /components/custom/landing/delivery-site-metadata.ts
+/components/custom/landing/download-platform.ts
 /components/custom/landing/footer-chrome-config.ts
 /components/custom/landing/header-menu.ts
 /components/custom/landing/hero-config.ts
 /components/custom/landing/hero-copy.ts
 /components/custom/landing/hero-form.ts
 /components/custom/landing/hero-sections.ts
+/components/custom/landing/install-offer.ts
 /components/custom/landing/landing-config.ts
+/components/custom/landing/landing-page.ts
+/components/custom/landing/legal-links.ts
+/components/custom/landing/network-sites.ts
+/components/custom/landing/network-strip.ts
 /components/custom/landing/page-sections.ts
 /components/custom/landing/plans-query.ts
+/components/custom/landing/platform-glyphs.tsx
+/components/custom/landing/site-frame.ts
 /components/custom/landing/site-metadata.ts
 /components/custom/landing/testimonials-marquee.tsx
 /components/custom/menu-label.tsx
 /components/custom/nav/admin-nav.tsx
 /components/custom/nav/client-nav.tsx
+/components/custom/nav/delivery-admin-nav.tsx
 /components/custom/nav/delivery-nav.tsx
 /components/custom/nav/nav-user.tsx
 /components/custom/nav/team-switcher.tsx
+/components/custom/network-strip.tsx
 /components/custom/paas-login.tsx
 /components/custom/session-provider.tsx
+/components/custom/site-frame.tsx
+/components/custom/site-theme.tsx
 /components/custom/submit-button.tsx
+/components/custom/theme-provider.client.tsx
 /components/ui/date-range-picker.tsx
 /db/index.ts
 /db/migrate.ts
@@ -202,6 +232,17 @@ npm-debug.log*
 /lib/drizzle/meta/0000_snapshot.json
 /lib/drizzle/meta/0001_snapshot.json
 /lib/drizzle/meta/_journal.json
+/lib/site-data/generate.mjs
+/lib/site-data/generated.ts
+/lib/site-data/kinds.ts
+/lib/site-data/read-site-data.ts
+/lib/site-data/site-theme.ts
+/lib/site-data/validate.mjs
 /middleware.ts
+/public/brand/marks/app-gallery.svg
+/public/brand/marks/app-store.svg
+/public/brand/marks/chrome-web-store.svg
+/public/brand/marks/google-play.svg
+/public/brand/marks/windows.svg
 /types/next-auth.d.ts
 # @rokct-composed-end

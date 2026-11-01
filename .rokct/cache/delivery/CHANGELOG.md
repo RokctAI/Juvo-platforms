@@ -1,5 +1,82 @@
 # Changelog
 
+## 1.1.1
+
+* The storefront hero no longer offers a call to action that goes nowhere.
+  `components/custom/landing/delivery-hero-form.tsx` draws "See pricing"
+  only when the pricing section is on the page, reading base_sdk 1.48.0's
+  `HeroFormProps.nav` - the page's live section list. The pricing section
+  already turns itself down when there are no plans to price
+  (`delivery-pricing-section.tsx` `meta.renders`), which is every render
+  while the platform's plan catalog cannot be read, and until now the
+  hero's PRIMARY button pointed at the `#pricing` anchor that the page then
+  did not have. With pricing off the page, "Log in to your portal" takes
+  the primary style, so the hero still leads somewhere that works. A host
+  that hands no `nav` over keeps the button exactly as before.
+
+## 1.1.0
+
+* The tenant admin panel gains a Location types page: the kinds of place a
+  driver files a point of interest as, and which of them a customer sees on
+  the map. The vocabulary was only editable from the Frappe desk, and the
+  words a driver types when nothing fits were only visible there too.
+  * `templates/app/admin/logistics/location-types/page.tsx` at
+    `/admin/logistics/location-types`, where base_sdk's admin nav already
+    keeps the delivery pages (zones, vehicles, deliveryman settings). Two
+    tables, one decision each. The vocabulary: every Location Type with its
+    industry, the active points filed under it, a shown-to-customers switch,
+    a Seeded badge on the types the platform ships (they come back if they
+    are deleted) and one on the type that carries the driver's own words.
+    Above it, an add-a-type form - the text is stored as typed, because the
+    type is named after it, and adding one that exists changes nothing.
+    Below it, "Typed by drivers": the free texts filed under the catch-all
+    type, busiest first with when each was last used, and a Promote action
+    per row that makes a recurring one a kind of its own. The target name
+    defaults to the driver's words and can be changed before promoting; the
+    answer's re-typed count is what the page reports, because promoting
+    moves the points that used the text. A promoted type starts hidden from
+    customers, the default the backend takes, and the switch above is how it
+    is shown. Loading, could-not-load and nothing-here states are distinct:
+    an admin has to be able to tell an empty vocabulary from a tenant site
+    that did not answer.
+  * `templates/app/actions/delivery/admin/location-types.ts`: the five
+    server actions, each one of map's `api.poi.admin_*` whitelisted defs
+    through base_sdk >= 1.3.0's kernel `paasCall` -
+    `admin_list_location_types`, `admin_create_location_type`,
+    `admin_set_type_visibility`, `admin_list_custom_types` and
+    `admin_promote_custom_type` - with the defs' own parameter names as the
+    payload keys and the visibility flag sent as 1 or 0, the Check the
+    backend stores. The defs assert the roles themselves (System Manager or
+    Administrator), so the page adds no gate of its own. The reads log and
+    re-throw where base_sdk's admin reads answer `[]`, so that the page can
+    tell a failed call from an empty vocabulary.
+  * `templates/components/custom/nav/delivery-admin-nav.tsx`: the sidebar
+    group for the admin pages this SDK adds, registered by two
+    `integrations` lines on base_sdk's `components/custom/app-sidebar.tsx`
+    (an import beside the `DeliveryNav` import this SDK already owns, and
+    the role-gated render after `<SidebarContent>`, both literals read from
+    base_sdk 1.47.0) rather than by shipping a copy of base's 380-line
+    `nav/admin-nav.tsx`, which would go stale the first time base adds a
+    page. The gate names the two roles the defs accept. The installer skips
+    an integration whose placeholder is absent, so an older or rearranged
+    sidebar draws no group and the page stays reachable by URL. Its labels
+    are plain English, as base_sdk's admin pages are: the host shell's i18n
+    dictionary carries `nav.*` keys for the groups it shipped with and has
+    none for a page this SDK adds.
+  * `tests/test_location_types_page.py`: stdlib static contract tests over
+    the templates and the manifest, the shape crm_sdk's
+    `tests/test_gateway_calls.py` established - the cmd of every gateway
+    call is a positional string literal, the five cmds are map's alias names
+    verbatim, every payload key is one of the defs' parameter names, no
+    `/api/method/` URL and no browser-side `frappe.call`, and the manifest
+    installs, requires and integrations say what this entry says. Run from
+    the repository root: `python3 -m unittest discover -s
+    delivery/nextjs/tests -v`.
+  * The page calls only methods map adds; until they are on the site every
+    call fails at the gateway and the page shows its could-not-load state.
+    No behaviour of the storefront, the landing seams or the deliveryman's
+    own sidebar group changes.
+
 ## 1.0.1
 
 * The header shows the wordmark only. Ray, 2026-09-09: "i saw supacharge
