@@ -16,7 +16,7 @@
 
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { RiLoader4Line } from "@remixicon/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -31,7 +31,7 @@ export default function AdminGalleryPage() {
     async function fetchGallery() {
       try {
         const data = await getGallery();
-        setImages(data);
+        setImages(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching gallery:", error);
       } finally {
@@ -44,7 +44,7 @@ export default function AdminGalleryPage() {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-gray-500" />
+        <RiLoader4Line className="size-8 animate-spin text-gray-500" />
       </div>
     );
   }
@@ -64,16 +64,18 @@ export default function AdminGalleryPage() {
               <div className="relative w-full h-48">
                 <Image
                   src={img.image}
-                  alt={img.description || "Gallery Image"}
+                  alt={img.description || img.shop || "Gallery Image"}
                   fill
                   className="object-cover"
                 />
               </div>
               <CardContent className="p-4">
                 <p className="text-sm font-medium">{img.shop}</p>
-                <p className="text-xs text-muted-foreground">
-                  {img.description}
-                </p>
+                {img.description ? (
+                  <p className="text-xs text-muted-foreground">
+                    {img.description}
+                  </p>
+                ) : null}
               </CardContent>
             </Card>
           ))

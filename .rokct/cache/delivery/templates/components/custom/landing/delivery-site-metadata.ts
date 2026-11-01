@@ -26,8 +26,9 @@
 // and the registry checks the default export structurally when it loads
 // this module.
 //
-// No `icon`: the SDK ships no icon file, so base_sdk >= 1.17.0 draws the
-// fallback favicon (the domain's first letter) itself. No `still`, no `logo`,
+// `icon` (since 1.2.0) is Juvo's own mark, the customer app's
+// brand_logo_rounded.svg, which this SDK installs at public/juvo/; until
+// then base_sdk >= 1.17.0 drew the letter favicon. No `still`, no `logo`,
 // no `ogImage`: there is no delivery artwork in the sources, and base's
 // generated card draws the tagline on its own. Every claim in the
 // description is a source fact:
@@ -38,7 +39,7 @@
 // Yearly, and trial_period_days 14 on the yearly record.
 //
 // The name and the URL are Ray's ruling of 2026-09-09: "deliveryplatform
-// will be juvo so i will point juvo.app to it". `siteName` is "juvo"
+// will be juvo so i will point juvo.app to it". `siteName` was "juvo" until 1.2.0
 // exactly as he wrote it - lower-case, no wordmark, no tagline of its own
 // and no capitalisation invented here (paas_customer's own README titles
 // the customer app "Juvo"; the storefront keeps Ray's spelling) - and
@@ -59,14 +60,20 @@ export interface DeliverySiteMetadata {
   ogImage?: string;
   /** Asset path drawn into the generated preview image; none here. */
   logo?: string;
+  /** The favicon (base_sdk >= 1.17.0): Juvo's own mark since 1.2.0. */
+  icon?: string;
   locale?: string;
 }
 
 const DELIVERY_SITE_METADATA: DeliverySiteMetadata = {
-  // Ray, 2026-09-09: "deliveryplatform will be juvo so i will point juvo.app to it".
-  siteName: "juvo",
-  url: "https://juvo.app",
-  title: "juvo — last-mile deliveries, intercity parcels, driver dispatch",
+  // Ray, 2026-09-09: "deliveryplatform will be juvo so i will point juvo.app to it". Since 1.2.0
+  // the site is Juvo Platforms, live at platform.juvo.app (the shell repo is RokctAI/Juvo-platforms),
+  // and the name matches the footer's credit line, `© 2026 Juvo Platforms`.
+  siteName: "Juvo Platforms",
+  url: "https://platform.juvo.app",
+  title: "Juvo Platforms — your own white-label delivery platform",
+  // paas_customer assets/svgs/brand_logo_rounded.svg, installed by this SDK under public/juvo/.
+  icon: "/juvo/juvo-mark.svg",
   tagline: "Last-mile deliveries, intercity parcels and driver dispatch on a white-label delivery platform",
   description:
     "A white-label delivery platform on a PaaS plan: last-mile deliveries by drivers on your own delivery network, intercity parcels through integrated logistics providers, driver dispatch and delivery zones, cash on delivery, WhatsApp order integration, parcel tracking sync and a digital wallet. Billed monthly or yearly in USD, with a 14-day trial on the yearly plan.",

@@ -53,8 +53,15 @@
 // Ray's words for the three apps.
 //
 // The try-it block (the one surface that may say "demo account", because
-// Ray asked for those details here) is rendered from environment variable
-// NAMES only. The mechanism it describes exists: users_sdk 1.3.8 (the
+// Ray asked for those details here). Since 1.2.0 it names the demo
+// addresses by default: auth_sdk >= 1.13.0 (lib/src/common/services/
+// demo_sign_in.dart, in every build of the three apps, release included)
+// signs customer@, manager@ and driver@demo.rokct.ai in locally and
+// base_sdk's demo interceptor serves the session from the apps' own sample
+// data, whatever the password. The environment variables below still
+// replace them for a deployment that marks real accounts. What follows is
+// the 1.0.x reasoning, kept for the record: the block was rendered from
+// environment variable NAMES only. The mechanism it describes exists: users_sdk 1.3.8 (the
 // Frappe half, RokctAI/Users users/frappe/fixtures/
 // custom_field_user_is_demo_account.json) marks a real account on the
 // production backend `is_demo_account`, and auth_sdk 1.11.0 / base_sdk
@@ -160,10 +167,9 @@ export const DELIVERY_APPS: DeliveryApp[] = [
       // paas_customer .github/workflows/release.yml: build_android: true ("Auto Release (Weekly)";
       // tags v2.8.9, v2.8.9-rc1 are its output).
       { ...ANDROID, href: releasesPage("paas_customer"), shown: true },
-      // gap: paas_customer's release.yml declares build_android only. Its CI build.yml sets
-      // build_windows: true, but that lane attaches nothing to a release, so there is no Windows
-      // build to link. Flip shown when release.yml carries build_windows.
-      { ...DESKTOP, href: releasesPage("paas_customer"), shown: false },
+      // Since 1.2.0: the release lane attaches the Windows installer (v1.2.12, 2026-10-20, carries
+      // customer-windows-setup-v1.2.12.exe).
+      { ...DESKTOP, href: releasesPage("paas_customer"), shown: true },
       // demoted for now (Ray, 2026-09-09). gap: no iOS lane in any of the three repos and no App
       // Store listing; the href is the releases page rather than a URL nothing publishes.
       { ...IOS, href: releasesPage("paas_customer"), shown: false },
@@ -202,11 +208,9 @@ export const DELIVERY_APPS: DeliveryApp[] = [
       // paas_driver .github/workflows/release.yml: build_android: true (and build_hms: true, the
       // Huawei build of the same app); the v1.2.9 release carries app-v1.2.9.apk.
       { ...ANDROID, href: releasesPage("paas_driver"), shown: true },
-      // gap: paas_driver's release.yml declares build_android and build_hms, not build_windows,
-      // so the lane that publishes the next release builds no Windows app - although the v1.2.9
-      // release on the page today does carry an app-windows-v1.2.9.zip. Flip shown when
-      // release.yml carries build_windows.
-      { ...DESKTOP, href: releasesPage("paas_driver"), shown: false },
+      // Since 1.2.0: the release lane attaches the Windows installer (v2.8.12, 2026-10-16, carries
+      // driver-windows-setup-v2.8.12.exe).
+      { ...DESKTOP, href: releasesPage("paas_driver"), shown: true },
       // demoted for now (Ray, 2026-09-09). gap: no iOS lane, no App Store listing.
       { ...IOS, href: releasesPage("paas_driver"), shown: false },
     ],
@@ -250,6 +254,17 @@ export const DELIVERY_DEMO_ENV = {
   },
 } as const;
 
+/**
+ * The demo addresses every build of the three apps signs in locally
+ * (auth_sdk >= 1.13.0 demo_sign_in.dart), one per app, used when the
+ * deployment sets no login of its own (1.2.0).
+ */
+export const DELIVERY_DEMO_LOGINS: Record<DeliveryAppId, string> = {
+  customer: "customer@demo.rokct.ai",
+  manager: "manager@demo.rokct.ai",
+  driver: "driver@demo.rokct.ai",
+};
+
 export interface DeliveryDemoAccount {
   login: string;
   /** Absent when the password variable is unset: the block then shows the login alone. */
@@ -288,17 +303,17 @@ const account = (
 export function readDeliveryDemoDetails(): DeliveryDemoDetails {
   const accounts: DeliveryDemoDetails["accounts"] = {};
   const customer = account(
-    process.env.NEXT_PUBLIC_JUVO_DEMO_CUSTOMER_LOGIN,
+    process.env.NEXT_PUBLIC_JUVO_DEMO_CUSTOMER_LOGIN || DELIVERY_DEMO_LOGINS.customer,
     process.env.NEXT_PUBLIC_JUVO_DEMO_CUSTOMER_PASSWORD,
   );
   if (customer) accounts.customer = customer;
   const manager = account(
-    process.env.NEXT_PUBLIC_JUVO_DEMO_MANAGER_LOGIN,
+    process.env.NEXT_PUBLIC_JUVO_DEMO_MANAGER_LOGIN || DELIVERY_DEMO_LOGINS.manager,
     process.env.NEXT_PUBLIC_JUVO_DEMO_MANAGER_PASSWORD,
   );
   if (manager) accounts.manager = manager;
   const driver = account(
-    process.env.NEXT_PUBLIC_JUVO_DEMO_DRIVER_LOGIN,
+    process.env.NEXT_PUBLIC_JUVO_DEMO_DRIVER_LOGIN || DELIVERY_DEMO_LOGINS.driver,
     process.env.NEXT_PUBLIC_JUVO_DEMO_DRIVER_PASSWORD,
   );
   if (driver) accounts.driver = driver;

@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.2
+
+* fix(icons): icons come from `@remixicon/react` (the fleet's one icon set)
+  instead of `lucide-react`. `@remixicon/react` ^4.6.0 is declared in
+  `dependencies`. Icons only.
+
+## 1.2.1
+
+* Category edit/delete send `uuid`, the argument `update_category`/`delete_category` take.
+* Manager product list and revalidation use `/manager/products/<id>` instead of the removed `/dashboard` route.
+
 ## 1.2.0
 
 * The server actions call the platform through `paasCall` from the base

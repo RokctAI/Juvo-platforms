@@ -31,7 +31,7 @@
 // hotlinked from a chat template's CDN and the "Trusted by 20M+ users"
 // claim are gone. The background is empty (the hero hides the block), the
 // trust line is empty (the network strip is what stands under the hero
-// now), the Chrome badge draws lucide's own Chrome mark as the header's
+// now), the Chrome badge draws Remixicon's Chrome mark as the header's
 // extension button does, and the Google Play badge has no icon - a badge
 // without one is not drawn until a home SDK's hero copy gives it one.
 
@@ -52,7 +52,7 @@ export interface HeroBadge {
   label: string;
   /**
    * An image icon (a public path or an absolute URL), or a built-in glyph:
-   * "app-store" (the Apple mark) or "chrome" (lucide's Chrome mark, the one
+   * "app-store" (the Apple mark) or "chrome" (Remixicon's Chrome mark, the one
    * the header's extension button draws). Absent, or an image with an
    * empty `src`: the badge is not drawn (below `md` it would be an empty
    * pill), so a badge waits for its icon rather than inventing one. Since
@@ -120,6 +120,14 @@ export interface HeroConfig {
    * home SDK's hero copy; no shell changes until it does.
    */
   logo?: "tile" | "none";
+  /**
+   * Plain, serialisable data the home SDK's hero COPY module (loaded on
+   * the server) hands to its hero FORM (a client module) through the view
+   * (since 1.53.0). base never reads it. A local-data site's home SDK puts
+   * the data/sections.json hero here, so the form draws the site's own
+   * hero without a client bundle importing the server-only data reader.
+   */
+  formData?: unknown;
 }
 
 const CHROME_BADGE: HeroBadge = {

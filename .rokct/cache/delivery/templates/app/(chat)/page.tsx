@@ -36,8 +36,13 @@
 //     PaaSLogin, the tenant login form. The host case is answered by a
 //     redirect carrying the resolved site so PaaSLogin reads it the one way
 //     it knows, from the query.
-//  3. Everyone else goes to base_sdk's composed landing at /landing: the
-//     storefront that sells the platform.
+//  3. Everyone else gets the Juvo home (since 1.2.0, Ray, 2026-11-01:
+//     "do v2" of the approved concept): components/custom/juvo/juvo-home.tsx,
+//     the storefront that sells the platform, with the three app pages
+//     under /apps. Until 1.1.2 this step redirected to base_sdk's composed
+//     /landing, which still answers (its registered sections are unchanged)
+//     but is no longer where `/` sends a visitor; the header logo of every
+//     Juvo page links back here.
 //
 // The session is read through the kernel seam (app/services/base/session.ts),
 // never through app/(auth) directly, so this page builds identically with
@@ -52,6 +57,8 @@ import {
   hostFromHeaders,
   lookupTenantHost,
 } from "@/app/services/base/tenant-hosts";
+import { JuvoHome } from "@/components/custom/juvo/juvo-home";
+import { loadJuvoTour } from "@/components/custom/juvo/juvo-load";
 import { PaaSLogin } from "@/components/custom/paas-login";
 
 export const dynamic = "force-dynamic";
@@ -84,5 +91,10 @@ export default async function Page({
     }
   }
 
-  redirect("/landing");
+  const [customer, manager, driver] = await Promise.all([
+    loadJuvoTour("customer"),
+    loadJuvoTour("manager"),
+    loadJuvoTour("driver"),
+  ]);
+  return <JuvoHome tours={{ customer, manager, driver }} />;
 }

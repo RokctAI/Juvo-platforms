@@ -43,7 +43,7 @@
 // surfaces), never a literal brand colour.
 
 import React from "react";
-import { Monitor, Smartphone, type LucideIcon } from "lucide-react";
+import { RiComputerLine, RiSmartphoneLine, type RemixiconComponentType } from "@remixicon/react";
 
 import {
   DELIVERY_SHOWN_APPS,
@@ -55,10 +55,10 @@ import { DELIVERY_PAGE_SECTIONS } from "@/components/custom/landing/delivery-pag
 import type { PageSectionMeta } from "@/components/custom/landing/page-sections";
 
 /** The glyph beside each button: a phone for the phone builds, a monitor for the desktop one. */
-const BUILD_GLYPHS: Record<DeliveryAppBuild["id"], LucideIcon> = {
-  android: Smartphone,
-  desktop: Monitor,
-  ios: Smartphone,
+const BUILD_GLYPHS: Record<DeliveryAppBuild["id"], RemixiconComponentType> = {
+  android: RiSmartphoneLine,
+  desktop: RiComputerLine,
+  ios: RiSmartphoneLine,
 };
 
 const PRIMARY_BUTTON =
