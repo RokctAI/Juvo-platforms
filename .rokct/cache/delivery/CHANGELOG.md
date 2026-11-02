@@ -1,4 +1,16 @@
 # Changelog
+## 1.2.2
+
+- The auth card under the Juvo shell is styled properly: juvo.css resets now sit in `:where(.jv)` so Tailwind utilities win inside the card, `.jv-auth` maps every shadcn token (`--card`, `--primary`, `--input`, `--border` ...) to the Juvo palette in light and dark, and `bg-primary`/`text-primary` are routed through `--primary` (the shell tailwind.config pins primary to green).
+- `SiteShellLogo` renders the Juvo mark above the card, the same one the header shows.
+
+## 1.2.1
+
+* fix(site): the login, register and forgot-password pages sit inside the
+  Juvo header and footer. delivery_sdk installs
+  `components/custom/site-shell.tsx` (auth_sdk >= 1.12.0's `SiteShell`),
+  which wraps the auth card in `JuvoFrame`; as the home SDK its copy replaces
+  auth_sdk's generic default.
 
 ## 1.2.0
 

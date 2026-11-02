@@ -52,7 +52,7 @@ MANIFEST = os.path.join(SDK_ROOT, "manifest.json")
 CHANGELOG = os.path.join(SDK_ROOT, "CHANGELOG.md")
 TEMPLATES = os.path.join(SDK_ROOT, "templates")
 
-VERSION = "1.2.0"
+VERSION = "1.2.2"
 
 JUVO = "components/custom/juvo"
 COPY = JUVO + "/juvo-copy.ts"
@@ -292,6 +292,22 @@ class IconsTest(unittest.TestCase):
         used = set(re.findall(r"icon: \"([a-z0-9-]+)\"", read(COPY)))
         self.assertTrue(used)
         self.assertEqual(used - drawn, set())
+
+
+class SiteShellTest(unittest.TestCase):
+    """1.2.1: auth_sdk's pages are framed by the Juvo header and footer."""
+
+    def test_installed_at_auth_sdk_path(self):
+        with open(MANIFEST, encoding="utf-8") as f:
+            targets = {e["to"] for e in json.load(f)["installs"]}
+        self.assertIn("components/custom/site-shell.tsx", targets)
+
+    def test_exports_site_shell_in_juvo_frame(self):
+        src = read("components/custom/site-shell.tsx")
+        self.assertIn("export function SiteShell", src)
+        self.assertIn("export interface SiteShellProps", src)
+        self.assertIn("<JuvoFrame>", src)
+        self.assertNotIn('"use client"', src)
 
 
 if __name__ == "__main__":
