@@ -57,12 +57,12 @@ html.dark:has(.jv)::-webkit-scrollbar-thumb{background:#FF8B40;border-color:#0F0
 html:has(.jv) body{background:var(--jv-page,#F5EFE6)}
 html.dark:has(.jv) body{background:#0F0B08}
 
-.jv *{box-sizing:border-box;margin:0;padding:0}
+:where(.jv) *{box-sizing:border-box;margin:0;padding:0}
 html:has(.jv){scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 .jv{background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--jv-sans);overflow-x:clip;min-height:100dvh}
-.jv img{display:block;max-width:100%}
-.jv a{color:inherit;text-decoration:none}
-.jv button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:where(.jv) img{display:block;max-width:100%}
+:where(.jv) a{color:inherit;text-decoration:none}
+:where(.jv) button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .jv :focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:6px}
 .jv .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
 .jv .mono{font-family:var(--jv-mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
@@ -571,3 +571,21 @@ html:has(.jv){scroll-behavior:smooth;-webkit-text-size-adjust:100%}
   html:has(.jv){scroll-behavior:auto}
   .jv *,.jv *::before,.jv *::after{animation:none!important;transition:none!important}
 }
+
+/* auth_sdk pages inside SiteShell: the card centred between header and footer. */
+.jv-auth{display:flex;flex-direction:column;min-height:calc(100dvh - 160px)}
+.jv-auth>*{flex:1;background:transparent;padding:32px 20px}
+/* auth_sdk's card is shadcn: it reads HSL-triplet tokens (--card, --primary,
+   --input ...). .jv's own --card is a hex colour, so inside the card it went
+   invalid; map every shadcn token to the Juvo palette here. The reset above
+   is :where() so Tailwind utilities (padding, borders, bg) win in the card. */
+.jv-auth{--background:36 47% 93%;--foreground:28 33% 8%;--card:40 100% 99%;--card-foreground:28 33% 8%;--popover:40 100% 99%;--popover-foreground:28 33% 8%;--primary:24 100% 50%;--primary-foreground:28 79% 6%;--secondary:35 33% 88%;--secondary-foreground:28 33% 8%;--muted:35 33% 88%;--muted-foreground:28 15% 31%;--accent:35 33% 88%;--accent-foreground:28 33% 8%;--border:30 18% 80%;--input:30 18% 74%;--ring:24 100% 50%;--radius:.75rem}
+.dark .jv-auth{--background:24 30% 5%;--foreground:32 52% 93%;--card:22 24% 9%;--card-foreground:32 52% 93%;--popover:22 24% 9%;--popover-foreground:32 52% 93%;--primary:23 100% 53%;--primary-foreground:22 83% 5%;--secondary:24 18% 14%;--secondary-foreground:32 52% 93%;--muted:24 18% 14%;--muted-foreground:30 15% 64%;--accent:24 18% 14%;--accent-foreground:32 52% 93%;--border:28 12% 22%;--input:28 12% 28%;--ring:23 100% 53%}
+.jv-auth .bg-card{box-shadow:0 18px 50px -24px rgba(26,19,13,.35)}
+/* The shell's tailwind.config pins primary to a literal #16a34a rather than
+   hsl(var(--primary)), so bg-primary/text-primary ignore the token: route
+   them through it here until base fixes the config. */
+.jv-auth .bg-primary{background-color:hsl(var(--primary))}
+.jv-auth .bg-primary:hover{background-color:hsl(var(--primary)/.9)}
+.jv-auth .text-primary{color:hsl(var(--primary))}
+.jv-auth .text-primary:hover{color:hsl(var(--primary)/.8)}
