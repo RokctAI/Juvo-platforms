@@ -38,10 +38,10 @@ import {
   type JuvoHomePanel,
 } from "./juvo-copy";
 import { JuvoGlyph } from "./juvo-icons";
-import { Device, Display, JuvoFrame, Phone, Tablet, resolveShot, type JuvoTours } from "./juvo-parts";
+import { Device, Display, JuvoFrame, Phone, resolveShot, type JuvoTours } from "./juvo-parts";
 
 function Hero({ tours }: { tours: JuvoTours }) {
-  const [customer, driver] = JUVO_HERO.phones;
+  const [customer, manager, driver] = JUVO_HERO.phones;
   return (
     <section className="hero">
       <div className="wrap">
@@ -83,7 +83,7 @@ function Hero({ tours }: { tours: JuvoTours }) {
           <svg className="route-svg" viewBox="0 0 600 640" preserveAspectRatio="none" aria-hidden>
             <path d="M40 600 C 140 520, 120 420, 230 400 S 420 330, 470 220 S 560 90, 590 40" />
           </svg>
-          <Tablet img={resolveShot(tours, JUVO_HERO.tablet)} className="t-m" sizes="(max-width: 900px) 92vw, 600px" preload />
+          <Phone img={resolveShot(tours, manager)} className="p-m" sizes="(max-width: 900px) 40vw, 240px" preload />
           <Phone img={resolveShot(tours, driver)} className="p-d" sizes="(max-width: 900px) 32vw, 190px" preload />
           <Phone img={resolveShot(tours, customer)} className="p-c" sizes="(max-width: 900px) 34vw, 200px" preload />
           <div className="legend" aria-hidden>
@@ -149,7 +149,6 @@ function Flow({ tours }: { tours: JuvoTours }) {
 
 function Panel({ panel, tours }: { panel: JuvoHomePanel; tours: JuvoTours }) {
   const href = juvoAppHref(panel.app);
-  const paired = panel.shelf.some((s) => s.shots.length > 1);
   return (
     <>
       <div>
@@ -179,40 +178,17 @@ function Panel({ panel, tours }: { panel: JuvoHomePanel; tours: JuvoTours }) {
           </Link>
         </div>
       </div>
-      {paired ? (
-        <div className="devwrap">
-          <p className="devnote mono">
-            <JuvoGlyph name="tablet" /> {JUVO_APPS_SECTION.devnote.tablet} <JuvoGlyph name="smartphone" /> {JUVO_APPS_SECTION.devnote.phone}
-          </p>
-          <div className="shelf wide">
-            {panel.shelf.map((s) => (
-              <figure key={s.title}>
-                <div className="pair">
-                  {s.shots.map((sh) => (
-                    <Device key={`${sh.device}-${sh.slug}`} tours={tours} shot={sh} sizes={sh.device === "tablet" ? "(max-width: 900px) 80vw, 560px" : "(max-width: 900px) 22vw, 140px"} />
-                  ))}
-                </div>
-                <figcaption>
-                  <b>{s.title}</b>
-                  {s.text}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="shelf">
-          {panel.shelf.map((s) => (
-            <figure key={s.title}>
-              <Device tours={tours} shot={s.shots[0]} sizes="(max-width: 900px) 46vw, 240px" />
-              <figcaption>
-                <b>{s.title}</b>
-                {s.text}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      )}
+      <div className="shelf">
+        {panel.shelf.map((s) => (
+          <figure key={s.title}>
+            <Device tours={tours} shot={s.shots[0]} sizes="(max-width: 900px) 46vw, 240px" />
+            <figcaption>
+              <b>{s.title}</b>
+              {s.text}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
     </>
   );
 }

@@ -138,9 +138,9 @@ export const JUVO_HERO = {
     { icon: "time" as JuvoIcon, text: "14-day trial on the yearly plan" },
   ],
   stageLabel: "The three Juvo apps",
-  tablet: shot("manager", "order_queue", "Manager app on a tablet: the order queue as a board of new, accepted, cooking and ready orders", "tablet"),
   phones: [
     shot("customer", "wallet_topup", "Customer app: topping up the wallet"),
+    shot("manager", "order_queue", "Manager app: the order queue of new, accepted, cooking and ready orders"),
     shot("driver", "driver_route", "Driver app: the dispatch route with stops in order"),
   ],
   legend: [
@@ -250,11 +250,10 @@ export const JUVO_FLOW = {
       icon: "store" as JuvoIcon,
       label: "Manager app",
       short: "Manager",
-      device: "tablet" as const,
+      device: "phone" as const,
       screens: [
-        { ...shot("manager", "order_queue", "Manager app on a tablet: the order queue", "tablet"), steps: [0] },
-        { ...shot("manager", "kitchen_queue", "Manager app on a tablet: the kitchen queue and ticket", "tablet"), steps: [1, 2] },
-        { ...shot("manager", "revenue_income", "Manager app on a tablet: revenue and profit", "tablet"), steps: [3] },
+        { ...shot("manager", "order_queue", "Manager app: the order queue"), steps: [0, 1] },
+        { ...shot("manager", "kitchen_queue", "Manager app: the kitchen queue"), steps: [2, 3] },
       ],
     },
     {
@@ -287,7 +286,7 @@ export interface JuvoHomePanel {
   title: string;
   tagline: string;
   features: JuvoFeature[];
-  /** Phone-only shelf, or (manager) tablet-and-phone pairs. */
+  /** One phone picture per shelf item. */
   shelf: { title: string; text: string; shots: JuvoShot[] }[];
 }
 
@@ -300,7 +299,6 @@ export const JUVO_APPS_SECTION = {
   tabsLabel: "Apps",
   more: (name: string) => `All ${name} features`,
   demo: "Try the demo",
-  devnote: { tablet: "Tablet at the counter", phone: "Phone in your pocket" },
   panels: [
     {
       app: "customer",
@@ -344,7 +342,6 @@ export const JUVO_APPS_SECTION = {
           title: "The kitchen sees every order",
           text: "Queue and ticket side by side",
           shots: [
-            shot("manager", "kitchen_queue", "Manager app on a tablet: kitchen queue with the ticket open", "tablet"),
             shot("manager", "order_queue", "Manager app on a phone: the order queue"),
           ],
         },
@@ -352,7 +349,6 @@ export const JUVO_APPS_SECTION = {
           title: "Cash, QR or offline",
           text: "The till at the counter",
           shots: [
-            shot("manager", "pos_checkout", "Manager app on a tablet: checkout with a QR pay link and receipt", "tablet"),
             shot("manager", "pos_scan", "Manager app on a phone: scanning a barcode"),
           ],
         },
@@ -360,7 +356,6 @@ export const JUVO_APPS_SECTION = {
           title: "Money at a glance",
           text: "Revenue next to profit by product",
           shots: [
-            shot("manager", "revenue_income", "Manager app on a tablet: revenue and profit by product", "tablet"),
             shot("manager", "revenue_income", "Manager app on a phone: revenue"),
           ],
         },
@@ -368,7 +363,6 @@ export const JUVO_APPS_SECTION = {
           title: "Your menu, organised",
           text: "Products and detail in one view",
           shots: [
-            shot("manager", "menu", "Manager app on a tablet: the menu with product detail", "tablet"),
             shot("manager", "product_detail", "Manager app on a phone: a product"),
           ],
         },
