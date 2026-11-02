@@ -191,8 +191,8 @@ export function readPlatformVersion(answer: unknown): string | null {
  * standing where the backend should be - it says nothing about the
  * platform, so `getPlatformStatus` treats it as no answer and falls
  * through to the next probe, then to `offline`. The gateway's own
- * `message` envelope is looked through: `platformCall` hands back
- * `data.message || data`, so a body of `{"message": null}` arrives as the
+ * `message` envelope is still looked through for callers that hand in a raw
+ * body, where `{"message": null}` would arrive as the
  * envelope itself, and an envelope whose only field is an empty `message`
  * is exactly as empty as `null`.
  */
@@ -336,12 +336,28 @@ export interface DownloadEntry {
 /** Everything the row needs that is not generic. */
 export interface FooterChromeConfig {
   /**
-   * The legal entity the copyright line names. Empty hides the line - the
-   * row never invents a holder.
+   * The site's own name, which the copyright line names (since 1.54.0:
+   * `© <year> <site name> · Built with ♥ by ROKCT`, Ray's ruling for every
+   * site). Absent or empty: the host's PLATFORM_NAME. A site that names
+   * itself in data (a local-data site's `site.json`) passes it here.
    */
-  copyrightHolder: string;
+  siteName?: string;
+  /**
+   * Before 1.54.0, the legal entity the copyright line named. The line now
+   * names the SITE (`siteName`), never the legal entity, so the row no
+   * longer draws this; it stays optional so a config that still sets it
+   * type-checks.
+   *
+   * @deprecated since 1.54.0 - use `siteName`.
+   */
+  copyrightHolder?: string;
   /** Defaults to the current year, as rokct.ai's footer does. */
   copyrightYear?: number;
+  /**
+   * What the row draws between the copyright and the credit (since
+   * 1.54.0). Defaults to SITE_CREDIT_SEPARATOR, " · ".
+   */
+  creditSeparator?: string;
   /**
    * The version to advertise. `null` or empty hides the version string
    * rather than showing a made-up number.
@@ -364,11 +380,11 @@ export interface FooterChromeConfig {
 }
 
 /**
- * The generic default: both product facts come from the environment, so a
- * shell that sets them gets the row with no code at all, and one that does
- * not gets the status indicator alone.
+ * The generic default: the version comes from the environment, and the
+ * copyright line names the host's PLATFORM_NAME (since 1.54.0; before it,
+ * the holder came from NEXT_PUBLIC_COPYRIGHT_HOLDER), so a shell gets the
+ * whole row with no code at all.
  */
 export const FOOTER_CHROME_CONFIG: FooterChromeConfig = {
-  copyrightHolder: process.env.NEXT_PUBLIC_COPYRIGHT_HOLDER ?? "",
   version: process.env.NEXT_PUBLIC_APP_VERSION ?? null,
 };

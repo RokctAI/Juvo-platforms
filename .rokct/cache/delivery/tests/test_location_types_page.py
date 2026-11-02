@@ -42,7 +42,7 @@ MANIFEST = os.path.join(SDK_ROOT, "manifest.json")
 CHANGELOG = os.path.join(SDK_ROOT, "CHANGELOG.md")
 TEMPLATES = os.path.join(SDK_ROOT, "templates")
 
-VERSION = "1.1.1"
+VERSION = "1.2.0"
 
 ACTIONS = "templates/app/actions/delivery/admin/location-types.ts"
 PAGE = "templates/app/admin/logistics/location-types/page.tsx"
@@ -313,7 +313,8 @@ class ManifestTests(unittest.TestCase):
     def test_every_install_source_exists(self):
         for entry in self.manifest["installs"]:
             path = os.path.join(SDK_ROOT, entry["from"])
-            self.assertTrue(os.path.isfile(path), entry["from"])
+            # base's installer copies a directory source whole (1.2.0's site).
+            self.assertTrue(os.path.isfile(path) or os.path.isdir(path), entry["from"])
 
     def test_requires_the_gateway_and_the_primitives_the_page_draws_with(self):
         required = self.manifest["requires"]
@@ -355,7 +356,7 @@ class ManifestTests(unittest.TestCase):
         self.assertIn('"System Manager", "Administrator"', replacements)
 
     def test_no_new_dependency(self):
-        # The page draws with the host shell's own primitives, lucide-react
+        # The page draws with the host shell's own primitives, @remixicon/react
         # and sonner, which the shell already carries: this SDK has declared
         # no dependency of its own since 1.0.0 and still declares none.
         self.assertEqual(self.manifest["dependencies"], {})

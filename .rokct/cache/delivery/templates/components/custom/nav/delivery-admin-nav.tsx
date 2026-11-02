@@ -31,7 +31,7 @@
 
 "use client";
 
-import { MapPin } from "lucide-react";
+import { RiMapPinLine } from "@remixicon/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -47,7 +47,7 @@ const deliveryAdminMenuItems = [
   {
     title: "Location types",
     url: "/admin/logistics/location-types",
-    icon: MapPin,
+    icon: RiMapPinLine,
   },
 ];
 

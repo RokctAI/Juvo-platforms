@@ -55,12 +55,14 @@ STAGED = {
     "register-link.ts": os.path.join(AUTH_GROUP, "register-link.ts"),
     "tenant-link.ts": os.path.join(AUTH_GROUP, "tenant-link.ts"),
     "brand-heading.ts": os.path.join(AUTH_GROUP, "login", "brand-heading.ts"),
+    "return-to.ts": os.path.join(AUTH_GROUP, "return-to.ts"),
 }
 NODE_SUITES = [
     "tenant-host.test.mts",
     "register-registry.test.mts",
     "register-link.test.mts",
     "login-heading.test.mts",
+    "return-to.test.mts",
 ]
 
 # Words no fixture, copy or comment of this SDK's new files may carry.
@@ -70,10 +72,12 @@ NEW_FILES = [
     os.path.join(AUTH_GROUP, "register-provision.ts"),
     os.path.join(AUTH_GROUP, "register-provision-default.ts"),
     os.path.join(AUTH_GROUP, "register-link.ts"),
+    os.path.join(AUTH_GROUP, "return-to.ts"),
     os.path.join(AUTH_GROUP, "register", "page.tsx"),
     os.path.join(AUTH_GROUP, "register", "register-view.tsx"),
     os.path.join(AUTH_GROUP, "login", "page.tsx"),
     os.path.join(TEMPLATES, "components", "custom", "auth", "register-registry.ts"),
+    os.path.join(TEMPLATES, "components", "custom", "auth", "header-auth-buttons.tsx"),
     os.path.join(TEMPLATES, "components", "custom", "auth-form.tsx"),
     os.path.join(TEMPLATES, "middleware.ts"),
     os.path.join(SDK_ROOT, "README.md"),
@@ -281,16 +285,82 @@ class TestTenantHostSwitch(unittest.TestCase):
         self.assertIn("(await headers()).get(TENANT_SITE_HEADER)", page)
         self.assertIn("params.site_name", page)
         self.assertLess(page.index("if (tenantSite) return <PaaSLogin tenantSite={tenantSite} />;"),
-                        page.index("return <LoginView />;"))
+                        page.index("return <LoginView next={safeReturnPath(params[RETURN_TO_PARAM])} />;"))
         view = read(os.path.join(AUTH_GROUP, "login", "login-view.tsx"))
         self.assertIn('"use client";', view)
-        self.assertIn("export function LoginView() {", view)
+        self.assertIn("export function LoginView({ next = null }: { next?: string | null } = {}) {", view)
         paas = read(os.path.join(TEMPLATES, "components", "custom", "paas-login.tsx"))
         self.assertIn('searchParams.get("site_name") || tenantSite || null', paas)
         self.assertIn('formData.append("site_name", siteName);', paas)
         # The portal login signs in against the named site and nowhere else.
         auth = read(os.path.join(AUTH_GROUP, "auth.ts"))
         self.assertIn("`https://${siteName}`", auth)
+
+    def test_portal_login_footer_is_the_site_credit(self):
+        """auth_sdk 1.10.2 (Ray, 2026-10-31: "all site will be copyright
+        sitename then built with love (as heart) by ROKCT"): the portal
+        login's footer draws base_sdk 1.54.0's SiteCredit for the site's
+        own name, never a fixed year or "All rights reserved"."""
+        paas = read(os.path.join(TEMPLATES, "components", "custom", "paas-login.tsx"))
+        self.assertIn('import { SiteCredit } from "@/components/custom/site-credit";', paas)
+        footer = paas.split("<footer", 1)[1].split("</footer>", 1)[0]
+        self.assertIn('<SiteCredit siteName={PLATFORM_NAME} className="text-xs text-gray-500" />', footer)
+        code = re.sub(r"\{/\*.*?\*/\}", "", footer, flags=re.S)
+        for gone in ("© 2025", "All rights reserved", "LEGAL_COMPANY_NAME"):
+            self.assertNotIn(gone, code, gone)
+        with open(os.path.join(SDK_ROOT, "manifest.json"), encoding="utf-8") as f:
+            manifest = json.load(f)
+        self.assertIn("components/custom/site-credit.tsx", manifest["requires"])
+        self.assertGreaterEqual(tuple(int(n) for n in manifest["version"].split(".")), (1, 10, 2))
+
+    def test_header_auth_pair_is_injected_into_base_slot(self):
+        """auth_sdk 1.11.0 (Ray, 2026-11-01: "we just moving login and
+        signup buttons to injection"): the pair base_sdk's header drew
+        until 1.60.0 is installed here and registered at base's header-auth
+        slot; it draws base's exact classes by default, the header's own
+        when given, and nothing on a local shell."""
+        by_from = {e["from"]: e["to"] for e in self.manifest_data()["installs"]}
+        self.assertEqual(
+            by_from.get("templates/components/custom/auth/header-auth-buttons.tsx"),
+            "components/custom/auth/header-auth-buttons.tsx",
+        )
+        line = [i for i in self.manifest_data()["integrations"]
+                if i["target"] == "components/custom/landing/header-auth.ts"]
+        self.assertEqual(len(line), 1)
+        self.assertEqual(line[0]["placeholder"], "// @rokct-sdk-header-auth-start")
+        self.assertEqual(
+            line[0]["replacement"],
+            '  { id: "auth-header-auth", load: () => import("@/components/custom/auth/header-auth-buttons") },',
+        )
+        for req in ("components/custom/landing/header-auth.ts", "components/custom/landing/header-menu.ts"):
+            self.assertIn(req, self.manifest_data()["requires"])
+        src = read(os.path.join(TEMPLATES, "components", "custom", "auth", "header-auth-buttons.tsx"))
+        self.assertTrue(src.lstrip().startswith("/*"))
+        self.assertIn('"use client";', src)
+        self.assertIn("export default function HeaderAuthButtons({", src)
+        self.assertIn('import type { HeaderAuthProps } from "@/components/custom/landing/header-auth";', src)
+        self.assertIn("if (!showsHeaderAuth(dataMode)) return null;", src)
+        # base_sdk 1.59.0 header.tsx's AUTH_LINK, AUTH_PILL and STACKED_BUTTON, verbatim.
+        for cls in (
+            '"text-[13px] font-medium text-foreground/70 transition-colors hover:text-foreground"',
+            '"rounded-full bg-black px-4 py-2 text-[13px] font-semibold text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-black"',
+            '"block w-full rounded-2xl py-4 text-center text-lg font-bold transition-colors"',
+            "`${STACKED_BUTTON} bg-foreground/5 text-foreground`",
+            "`${STACKED_BUTTON} bg-black text-white dark:bg-white dark:text-black`",
+        ):
+            self.assertIn(cls, src)
+        self.assertEqual(src.count('{t("auth.login")}'), 2)
+        self.assertEqual(src.count('{t("auth.signup")}'), 2)
+        self.assertIn("onClick={openLoginPopup}", src)
+        self.assertIn("onClick={openSignupPopup}", src)
+        self.assertEqual(src.count("onNavigate?.();"), 2)
+        self.assertIn('const loginClass = classes?.login ?? defaults.login;', src)
+        self.assertIn('const signupClass = classes?.signup ?? defaults.signup;', src)
+        self.assertIn("// @rokct-sdk-header-auth-start", read(os.path.join(SDK_ROOT, "README.md")))
+
+    def manifest_data(self):
+        with open(os.path.join(SDK_ROOT, "manifest.json"), encoding="utf-8") as f:
+            return json.load(f)
 
     def test_login_heading_folds_a_dotted_platform_name(self):
         """auth_sdk 1.7.3: the heading prints the brand, not the address.
@@ -337,6 +407,20 @@ class TestTenantHostSwitch(unittest.TestCase):
         passed = re.search(r"^# pass (\d+)$", run.stdout, re.M)
         self.assertIsNotNone(passed, run.stdout)
         self.assertGreaterEqual(int(passed.group(1)), 20)
+
+
+class TestGatewayBypassesAreMarked(unittest.TestCase):
+    # Ray's rule: every client call goes through rokct.platform.api; a raw
+    # /api/method/ fetch is allowed only when there is no other way, and
+    # then says why on the line above it.
+    def test_every_raw_method_fetch_says_why(self):
+        lines = read(os.path.join(AUTH_GROUP, "auth.ts")).splitlines()
+        hits = [i for i, line in enumerate(lines) if "fetch(" in line and "/api/method/" in line]
+        self.assertTrue(hits, "expected the native /api/method/login bypass")
+        for i in hits:
+            with self.subTest(line=i + 1):
+                self.assertIn("// bypasses gateway:", lines[i - 1])
+                self.assertIn("sid", lines[i - 1])
 
 
 if __name__ == "__main__":

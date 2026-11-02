@@ -32,7 +32,12 @@
 
 "use client";
 
-import { Loader2, MapPin, Plus, RefreshCw } from "lucide-react";
+import {
+  RiLoader4Line,
+  RiMapPinLine,
+  RiAddLine,
+  RiRefreshLine,
+} from "@remixicon/react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -199,7 +204,7 @@ export default function LocationTypesPage() {
           </p>
         </div>
         <Button variant="outline" onClick={load} disabled={loading}>
-          <RefreshCw className="mr-2 size-4" />
+          <RiRefreshLine className="mr-2 size-4" />
           Reload
         </Button>
       </div>
@@ -234,9 +239,9 @@ export default function LocationTypesPage() {
             </div>
             <Button onClick={handleAdd} disabled={adding}>
               {adding ? (
-                <Loader2 className="mr-2 size-4 animate-spin" />
+                <RiLoader4Line className="mr-2 size-4 animate-spin" />
               ) : (
-                <Plus className="mr-2 size-4" />
+                <RiAddLine className="mr-2 size-4" />
               )}
               Add type
             </Button>
@@ -266,7 +271,7 @@ export default function LocationTypesPage() {
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={4} className="h-24 text-center">
-                    <Loader2 className="size-6 animate-spin mx-auto" />
+                    <RiLoader4Line className="size-6 animate-spin mx-auto" />
                   </TableCell>
                 </TableRow>
               ) : loadFailed ? (
@@ -296,7 +301,7 @@ export default function LocationTypesPage() {
                   <TableRow key={row.name}>
                     <TableCell className="font-medium">
                       <div className="flex flex-wrap items-center gap-2">
-                        <MapPin className="size-4 text-muted-foreground" />
+                        <RiMapPinLine className="size-4 text-muted-foreground" />
                         {row.location_type_name}
                         {row.is_seeded && <Badge variant="secondary">Seeded</Badge>}
                         {row.takes_custom_type && (
@@ -320,7 +325,7 @@ export default function LocationTypesPage() {
                           }
                         />
                         {savingType === row.name && (
-                          <Loader2 className="size-4 animate-spin" />
+                          <RiLoader4Line className="size-4 animate-spin" />
                         )}
                       </div>
                     </TableCell>
@@ -356,7 +361,7 @@ export default function LocationTypesPage() {
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={4} className="h-24 text-center">
-                    <Loader2 className="size-6 animate-spin mx-auto" />
+                    <RiLoader4Line className="size-6 animate-spin mx-auto" />
                   </TableCell>
                 </TableRow>
               ) : loadFailed ? (
@@ -408,7 +413,7 @@ export default function LocationTypesPage() {
                           onClick={() => handlePromote(row)}
                         >
                           {promoting === row.custom_type && (
-                            <Loader2 className="mr-2 size-4 animate-spin" />
+                            <RiLoader4Line className="mr-2 size-4 animate-spin" />
                           )}
                           Promote
                         </Button>

@@ -622,11 +622,19 @@ def _carry_shell_owned_keys_standalone(template_text, composer_path):
     return json.dumps(merged, indent=2, ensure_ascii=False) + "\n"
 
 
-COMPOSER_TEMPLATES_REL = "core/utils/frappe/composer"
-COMPOSER_TEMPLATES_RAW_BASE = (
+# The Next.js registry: one <app_type>.json per shell product, sdks[] only.
+# The backend's modules[] live in core/utils/frappe/composer/ - each side
+# lists its own SDKs, so one backend can serve many app shells.
+COMPOSER_TEMPLATES_REL = "core/utils/nextjs/composer"
+# Rollout bridge: before the split, sdks[] lived in the combined frappe
+# templates. A name missing from the Next.js registry falls back to the
+# frappe template's sdks[] (when it carries any).
+LEGACY_COMPOSER_TEMPLATES_REL = "core/utils/frappe/composer"
+_PROTOCOL_RAW_BASE = (
     "https://raw.githubusercontent.com/RokctAI/The-Rokct-Protocol/main/"
-    + COMPOSER_TEMPLATES_REL
 )
+COMPOSER_TEMPLATES_RAW_BASE = _PROTOCOL_RAW_BASE + COMPOSER_TEMPLATES_REL
+LEGACY_COMPOSER_TEMPLATES_RAW_BASE = _PROTOCOL_RAW_BASE + LEGACY_COMPOSER_TEMPLATES_REL
 
 
 def _locate_composer_core():
@@ -680,6 +688,25 @@ def load_composer_core():
 
 
 def _fetch_template_standalone(name):
+    """Fetch the Next.js template, falling back to the legacy combined
+    frappe template's sdks[] when the Next.js registry has no such name."""
+    text = _fetch_template_url(COMPOSER_TEMPLATES_RAW_BASE, name)
+    if text is not None:
+        return text
+    legacy = _fetch_template_url(LEGACY_COMPOSER_TEMPLATES_RAW_BASE, name)
+    if legacy is None:
+        return None
+    try:
+        data = json.loads(legacy)
+    except Exception:
+        return legacy  # surfaced as invalid JSON by the caller
+    if not isinstance(data, dict) or not isinstance(data.get("sdks"), list):
+        return None
+    data.pop("modules", None)
+    return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
+
+
+def _fetch_template_url(raw_base, name):
     """Data-only registry fallback for standalone runs with no protocol
     checkout: fetch composer/<name>.json from the protocol repo, mirroring
     the flutter CI's curl of its composer/<app_type>.json. Only template
@@ -688,7 +715,7 @@ def _fetch_template_standalone(name):
     import urllib.error
     import urllib.request
 
-    url = f"{COMPOSER_TEMPLATES_RAW_BASE}/{name}.json"
+    url = f"{raw_base}/{name}.json"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "rokct-composer"})
         with urllib.request.urlopen(req, timeout=30) as resp:
@@ -704,17 +731,42 @@ def _fetch_template_standalone(name):
     return None
 
 
+def announce_own_composer_json():
+    """The log line for a shell whose app_type names no registry template -
+    the normal case for a client site (Ray, 2026-10-31: no per-client
+    compose templates): its own committed composer.json is the composition."""
+    name = resolve_app_type()
+    if name and os.path.exists(os.path.join(PROJECT_ROOT, "composer.json")):
+        print(
+            f"[i] no registry template '{name}.json': composing from the shell's own "
+            f"committed composer.json (its sdks[], home_sdk and data mode)."
+        )
+
+
 def resolve_composer_config():
     """Materialize composer.json from the registry template named by
     .rokct/config/app_type, when it names one. Delegates to the shared
     composer core (core/utils/frappe/compose_backend.py) whenever a protocol
-    checkout is locatable, so both stacks resolve templates with one
+    checkout is locatable, reading the Next.js registry
+    (core/utils/nextjs/composer/<app_type>.json, falling back to the legacy
+    frappe template's sdks[] during rollout), so both stacks resolve templates with one
     implementation; otherwise falls back to the same data-only fetch the
     flutter CI uses. Returns True when composer.json was (re)written. Either
     way the shell's own top-level keys (SHELL_OWNED_COMPOSER_KEYS - the
     "data" mode base_sdk reads, and its comment) survive the rewrite."""
     core = load_composer_core()
+    if core is not None and hasattr(core, "NEXTJS_COMPOSER_TEMPLATES_REL"):
+        written = core.resolve_composer_config(
+            PROJECT_ROOT,
+            registry_rel=COMPOSER_TEMPLATES_REL,
+            fallback_rel=LEGACY_COMPOSER_TEMPLATES_REL,
+        )
+        if not written:
+            announce_own_composer_json()
+        return written
     if core is not None:
+        # An older protocol checkout whose core predates the split: its
+        # registry is the combined frappe one, which still carries sdks[].
         return core.resolve_composer_config(PROJECT_ROOT)
 
     name = resolve_app_type()
@@ -722,6 +774,7 @@ def resolve_composer_config():
         return False
     text = _fetch_template_standalone(name)
     if text is None:
+        announce_own_composer_json()
         return False
     try:
         json.loads(text)
@@ -866,6 +919,69 @@ def record_home_sdk(home_sdk_name):
         json.dump(state, f, indent=2)
 
 
+def find_missing_sdk_requires(sdks_to_check, all_enabled_sdks):
+    """Check each SDK's own `sdk_requires` (manifest key, this layer only)
+    against the enabled set from composer.json.
+
+    `sdk_requires` lists the SDKs this layer needs composed alongside it
+    (names with or without the `_sdk` suffix). Each layer declares only its
+    own requirements in its own manifest: a Dart app using tasks does not
+    inherit the backend's need for projects. A persona flavor block
+    (`app_type.<persona>.sdk_requires`) counts only when the persona matches
+    this host's own role marker. `all_enabled_sdks` is the FULL enabled set,
+    so a scoped run (`sdk_composer.py <name>`) is still checked against the
+    whole profile. Returns [(sdk, required)] for every gap.
+    """
+    enabled = {
+        clean_sdk_name(s["name"] if isinstance(s, dict) else s)
+        for s in all_enabled_sdks
+    }
+    current_app_type = resolve_app_type()
+    missing = []
+    for sdk_config in sdks_to_check:
+        sdk_name = sdk_config["name"] if isinstance(sdk_config, dict) else sdk_config
+        manifest_path = os.path.join(resolve_active_path(sdk_config), "manifest.json")
+        if not os.path.exists(manifest_path):
+            continue
+        try:
+            with open(manifest_path, "r", encoding="utf-8-sig") as f:
+                manifest = json.load(f)
+        except Exception:
+            continue
+        declared = list(manifest.get("sdk_requires") or [])
+        flavor = (
+            (manifest.get("app_type") or {}).get(current_app_type)
+            if current_app_type
+            else None
+        )
+        if isinstance(flavor, dict):
+            declared += list(flavor.get("sdk_requires") or [])
+        for req in declared:
+            if clean_sdk_name(str(req).strip()) not in enabled:
+                missing.append((sdk_name, req))
+    return missing
+
+
+def check_sdk_requires(sdks_to_check, all_enabled_sdks):
+    """Fail the compose early, one clear line per gap, when an SDK requires
+    an SDK the profile does not enable."""
+    missing = find_missing_sdk_requires(sdks_to_check, all_enabled_sdks)
+    if not missing:
+        return
+    for sdk_name, req in missing:
+        print(
+            f"[!] Missing required SDK: '{sdk_name}' requires '{req}', "
+            f"which is not enabled in composer.json.",
+            file=sys.stderr,
+        )
+    print(
+        f"\n[!] Compose FAILED: {len(missing)} required SDK(s) not enabled. "
+        f"Enable them in composer.json or drop the SDK that needs them.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+
 def main():
     # Template-registry resolution first: a thin shell that names a registry
     # template in .rokct/config/app_type gets its composer.json materialized
@@ -903,6 +1019,8 @@ def main():
     if home_sdk_name is not None:
         print(f"[i] home SDK: {home_sdk_name}")
 
+    all_enabled_sdks = list(sdks_to_install)
+
     if len(sys.argv) >= 2:
         requested_names = sys.argv[1:]
         sdks_to_install = [s for s in sdks_to_install if s["name"] in requested_names]
@@ -915,6 +1033,9 @@ def main():
     record_home_sdk(home_sdk_name)
 
     resolve_and_cache_sdks(sdks_to_install)
+
+    # Fail fast, before any installer touches the host.
+    check_sdk_requires(sdks_to_install, all_enabled_sdks)
 
     for sdk in sdks_to_install:
         run_installer(sdk)

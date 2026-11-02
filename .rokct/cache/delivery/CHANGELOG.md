@@ -1,5 +1,52 @@
 # Changelog
 
+## 1.2.0
+
+* feat(site): the home page is the Juvo Platforms site, built from the
+  approved v2 concept, instead of a redirect to `/landing`. The whole site
+  lives in `templates/components/custom/juvo/` and is scoped to a `.jv`
+  root, with its own header (desktop menu plus a phone panel, both carrying
+  base_sdk 1.60.0's `HeaderAuthSlot` for Log in / Sign up), light and dark
+  tokens, the brand orange `#FF6600`, a primary-coloured scrollbar,
+  Remixicon icons, self-hosted Archivo and IBM Plex Mono (OFL), and motion
+  that stops under `prefers-reduced-motion`. The footer is the site credit
+  alone ("© 2026 Juvo Platforms · Built with ♥ by ROKCT"), with no wordmark.
+* feat(site): one page per app at `/apps/customer`, `/apps/manager` and
+  `/apps/driver` (`templates/app/apps/[app]/page.tsx`), each with its real
+  features, the full guided tour as a gallery, a demo block with that app's
+  `@demo.rokct.ai` login, and Android and Windows downloads. The manager
+  page shows the tablet beside the phone and says the app runs a store on
+  its own; the driver page names no Tasks SDK and no plans.
+* Pictures come from each paas repo's tour output on `main`
+  (`marketing/tour/feature-guide.md`, `screenshots/`, `tablet/screenshots/`
+  and the code-generated `svg/*.clean.svg`), read at build time and
+  revalidated hourly, with the step titles and captions taken from the live
+  guide. They are served through `app/juvo/tour/[app]/[device]/[file]`,
+  which only accepts tour file names, checks the bytes are a PNG or an SVG
+  under 4 MB and sends them with `nosniff`. No screenshot is committed.
+* Downloads come from each repo's latest GitHub release: the `app-v*.apk`
+  and the `*-windows-setup-v*.exe` assets, never the debug APK, the `.aab`
+  or the update bundle. Without a readable release the button opens the
+  repo's latest-release page instead of a guessed file. An optional
+  `JUVO_GITHUB_TOKEN` lifts the API rate limit.
+* `landing/delivery-apps.ts` gains `DELIVERY_DEMO_LOGINS` (the three demo
+  addresses auth_sdk's demo sign-in accepts), used when the
+  `NEXT_PUBLIC_JUVO_DEMO_*_LOGIN` variables are unset, and shows the
+  customer and driver Windows builds. `landing/delivery-site-metadata.ts`
+  names the site "Juvo Platforms" at https://platform.juvo.app.
+* The manifest installs the new directories and requires the base seams the
+  site imports (`header-auth-slot.tsx`, `landing/header-auth.ts`,
+  `site-credit.tsx`, `landing/site-credit.ts`, `theme-provider.tsx`).
+* tests: `tests/test_juvo_site.py`; `test_location_types_page.py` follows
+  the manifest version.
+
+## 1.1.2
+
+* fix(icons): the location-types page, the delivery and delivery-admin
+  navs and the apps section import their icons from `@remixicon/react`
+  (which the host shell carries) instead of lucide-react. Still no
+  dependency of its own.
+
 ## 1.1.1
 
 * The storefront hero no longer offers a call to action that goes nowhere.

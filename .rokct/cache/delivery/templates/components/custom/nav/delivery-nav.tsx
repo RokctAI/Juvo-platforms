@@ -28,7 +28,12 @@
 
 "use client";
 
-import { LayoutDashboard, Package, DollarSign, User } from "lucide-react";
+import {
+  RiDashboardLine,
+  RiBox3Line,
+  RiMoneyDollarCircleLine,
+  RiUserLine,
+} from "@remixicon/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import t from "@/app/lib/i18n";
@@ -45,22 +50,22 @@ const deliveryMenuItems = [
   {
     title: t("nav.delivery.dashboard"),
     url: "/manager/delivery",
-    icon: LayoutDashboard,
+    icon: RiDashboardLine,
   },
   {
     title: t("nav.delivery.my_orders"),
     url: "/manager/delivery/orders",
-    icon: Package,
+    icon: RiBox3Line,
   },
   {
     title: t("nav.delivery.earnings"),
     url: "/manager/delivery/finance",
-    icon: DollarSign,
+    icon: RiMoneyDollarCircleLine,
   },
   {
     title: t("nav.delivery.profile"),
     url: "/manager/delivery/profile",
-    icon: User,
+    icon: RiUserLine,
   },
 ];
 
