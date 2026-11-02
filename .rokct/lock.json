@@ -66,8 +66,8 @@
       "cache": ".rokct/cache/delivery",
       "git": "https://github.com/RokctAI/zones",
       "path": "../zones/delivery/nextjs",
-      "ref": "claude/project-thread-3o3tuh-juvo-platforms",
-      "commit": "3fbf1be44c33ec3d6908e2ec62a57ec956b5fad3",
+      "ref": "main",
+      "commit": "8183a47795e9635e6faac15406d4d0bce1e2070f",
       "version": "1.2.0",
       "install_py_sha256": "8ca4ef31c258f0ac3fca917f875522a5714cbcb410bf5a803cf5a648e2d3caed",
       "content_sha256": "9d3cc33af907e42eb586bdc0004d995e7e788f1c9c7f23d3719ee5c8ae0f6451"
