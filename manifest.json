@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "repo": "RokctAI/Juvo-platforms",
+  "commit": "c6a835d62c6b8ab9c9e0cd8f44865b5cbd150e26",
+  "taken_at": "2026-11-07T16:30:00Z",
+  "dir": "shots/c6a835d62c6b8ab9c9e0cd8f44865b5cbd150e26",
+  "files": {
+    "desktop-light.webp": {
+      "width": 1200,
+      "height": 833,
+      "bytes": 67038,
+      "sha256": "d852d526fb38a9083fc2b38ab2431b7a490dc89b6bd59ea6961ef7d0489d1725"
+    },
+    "desktop-dark.webp": {
+      "width": 1200,
+      "height": 833,
+      "bytes": 68118,
+      "sha256": "3537b6a53c001d45497559db67810a8ff0655dd42498801d4bf21172384e4999"
+    },
+    "option-light.webp": {
+      "width": 800,
+      "height": 500,
+      "bytes": 36558,
+      "sha256": "7388ea019b6e93d43ff251b648bdab014b831d4876ffd14fad8fd83635f22939"
+    },
+    "option-dark.webp": {
+      "width": 800,
+      "height": 500,
+      "bytes": 36834,
+      "sha256": "ad113e9cc340eea20213ed2575b2253ce71d1ab624b188148c42fd6ed2739625"
+    },
+    "phone-light.webp": {
+      "width": 560,
+      "height": 1149,
+      "bytes": 52414,
+      "sha256": "5d553e1eb23563ef0a12e1017553e43c1cbd4f5116066e2711423ea6000477e1"
+    },
+    "phone-dark.webp": {
+      "width": 560,
+      "height": 1149,
+      "bytes": 52902,
+      "sha256": "9dcaf786dd7247dc8b111bd31779939de564cd136521e6f7b3f71d5ee5c8a05d"
+    }
+  }
+}
