@@ -25,7 +25,7 @@
 // 2026-09-09: "deliveryplatform will be juvo so i will point juvo.app to it"
 // - written exactly as he wrote it. The product copy (title, description,
 // hero, sections) is delivery_sdk's, registered at compose time.
-export const PLATFORM_NAME = "juvo";
+export const PLATFORM_NAME = "Juvo Platforms";
 export const LEGAL_COMPANY_NAME = "ROKCT INTELLIGENCE (PTY) LTD";
 
 /**
