@@ -184,6 +184,9 @@ npm-debug.log*
 /components/custom/hero.tsx
 /components/custom/image-upload.tsx
 /components/custom/install-offer.tsx
+/components/custom/juvo-auth/juvo-auth-copy.ts
+/components/custom/juvo-auth/juvo-auth-panel.tsx
+/components/custom/juvo-auth/juvo-auth.css
 /components/custom/juvo/fonts/Archivo-italic.woff2
 /components/custom/juvo/fonts/Archivo-normal.woff2
 /components/custom/juvo/fonts/IBMPlexMono-500.woff2

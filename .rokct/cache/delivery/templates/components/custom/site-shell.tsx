@@ -20,9 +20,17 @@
 // footer and brand tokens as the home page (JuvoFrame). The header's own
 // Log in / Sign up come from its HeaderAuthSlot, so the page's handlers are
 // not needed here.
+//
+// 1.3.0 (the hosting_sdk 1.21.0 Cortex standard): a brand panel beside the
+// card (components/custom/juvo-auth/: its copy, the client panel that
+// follows the route, and scoped CSS that sets the card in the home page's
+// type and controls).
 
 import type { ReactNode } from "react";
 
+import "@/components/custom/juvo-auth/juvo-auth.css";
+
+import { JuvoAuthPanel } from "@/components/custom/juvo-auth/juvo-auth-panel";
 import { JuvoFrame } from "@/components/custom/juvo/juvo-parts";
 import { JUVO_BRAND } from "@/components/custom/juvo/juvo-copy";
 
@@ -35,7 +43,12 @@ export interface SiteShellProps {
 export function SiteShell({ children }: SiteShellProps) {
   return (
     <JuvoFrame>
-      <div className="jv-auth">{children}</div>
+      <section className="ja">
+        <div className="wrap ja-g">
+          <JuvoAuthPanel />
+          <div className="jv-auth ja-card">{children}</div>
+        </div>
+      </section>
     </JuvoFrame>
   );
 }
