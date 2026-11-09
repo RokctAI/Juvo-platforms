@@ -52,7 +52,7 @@ MANIFEST = os.path.join(SDK_ROOT, "manifest.json")
 CHANGELOG = os.path.join(SDK_ROOT, "CHANGELOG.md")
 TEMPLATES = os.path.join(SDK_ROOT, "templates")
 
-VERSION = "1.2.2"
+VERSION = "1.3.0"
 
 JUVO = "components/custom/juvo"
 COPY = JUVO + "/juvo-copy.ts"

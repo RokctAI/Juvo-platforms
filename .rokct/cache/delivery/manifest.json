@@ -1,6 +1,6 @@
 {
   "name": "delivery_sdk",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "installs": [
     {
       "from": "templates/app/(chat)/page.tsx",
@@ -93,6 +93,10 @@
     {
       "from": "templates/components/custom/site-shell.tsx",
       "to": "components/custom/site-shell.tsx"
+    },
+    {
+      "from": "templates/components/custom/juvo-auth",
+      "to": "components/custom/juvo-auth"
     }
   ],
   "dependencies": {},
