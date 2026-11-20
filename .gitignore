@@ -134,6 +134,10 @@ npm-debug.log*
 /app/brand-icon/route.tsx
 /app/juvo/tour/\[app\]/\[device\]/\[file\]/route.ts
 /app/landing/page.tsx
+/app/lib/i18n/sdk/auth.json
+/app/lib/i18n/sdk/base.json
+/app/lib/i18n/sdk/products.json
+/app/lib/i18n/sdk/telemetry.json
 /app/lib/paas-gateway.ts
 /app/lib/session.ts
 /app/lib/site-metadata.ts
@@ -237,6 +241,7 @@ npm-debug.log*
 /components/custom/landing/site-metadata.ts
 /components/custom/landing/site-shots.ts
 /components/custom/landing/testimonials-marquee.tsx
+/components/custom/language-toggle.tsx
 /components/custom/menu-label.tsx
 /components/custom/nav/admin-nav.tsx
 /components/custom/nav/client-nav.tsx

@@ -589,3 +589,20 @@ html:has(.jv){scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 .jv-auth .bg-primary:hover{background-color:hsl(var(--primary)/.9)}
 .jv-auth .text-primary{color:hsl(var(--primary))}
 .jv-auth .text-primary:hover{color:hsl(var(--primary)/.8)}
+
+/* Section entrance (motion pass, Ray 2026-11-20). CSS scroll-driven, so no
+ * JS and nothing hidden where unsupported or under reduced motion: each
+ * block in a section rises 12px and fades in as it enters the view. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .jv section > * > * {
+      animation: rk-section-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 25%;
+    }
+  }
+}
+@keyframes rk-section-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
