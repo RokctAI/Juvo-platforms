@@ -34,6 +34,7 @@ import { SessionProvider } from "@/components/custom/session-provider";
 import { ThemeProvider } from "@/components/custom/theme-provider";
 
 import "./globals.css";
+import { getRequestLocale } from "@/app/lib/i18n/server";
 
 const geistSans = localFont({
   src: "../public/fonts/geist.woff2",
@@ -61,8 +62,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const lang = await getRequestLocale();
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang={lang} className={`${geistSans.variable} ${geistMono.variable}`}>
       <head></head>
       <body className="font-sans antialiased">
         <SessionProvider>

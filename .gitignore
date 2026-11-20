@@ -241,6 +241,7 @@ npm-debug.log*
 /components/custom/landing/site-metadata.ts
 /components/custom/landing/site-shots.ts
 /components/custom/landing/testimonials-marquee.tsx
+/components/custom/language-toggle.tsx
 /components/custom/menu-label.tsx
 /components/custom/nav/admin-nav.tsx
 /components/custom/nav/client-nav.tsx
@@ -287,3 +288,6 @@ npm-debug.log*
 /public/juvo/juvo-mark.svg
 /types/next-auth.d.ts
 # @rokct-composed-end
+
+# Written by scripts/compose.sh on every compose (SDK copy registry).
+app/lib/i18n/sdk-registry.ts

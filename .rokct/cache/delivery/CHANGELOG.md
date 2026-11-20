@@ -1,4 +1,8 @@
 # Changelog
+## 1.3.1
+
+- Landing sections rise and fade in as they scroll into view (CSS scroll-driven, no JS, off under reduced motion).
+
 ## 1.3.0
 
 - The Juvo login and register pages meet the hosting_sdk 1.21.0 (Cortex) standard. Before, the auth card sat alone inside JuvoFrame. Now a brand panel sits beside it (`components/custom/juvo-auth/`): a kicker, a display title (the register page uses the home page's "Your own delivery platform."), a lede and three points taken from the home page (the three apps, USD billing monthly or yearly, the 14-day trial on the yearly plan). The panel copy follows the route through a small client component, and the scoped CSS (`.jv .ja*`) sets the card in the home page's type and controls: the wide display heading, mono labels and the orange pill submit. Light and dark follow juvo.css. The existing `.jv-auth` token map stays. Presentation only: auth_sdk's views, actions and fields are untouched.
