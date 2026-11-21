@@ -32,10 +32,8 @@
     }
   ],
   "features": [
-    "Three branded apps: customer, store and driver",
-    "Multi-store marketplace",
-    "Store owners run their shop from a phone",
-    "Deliveries, parcels and driver payouts in one app",
-    "Launch your own branded delivery platform"
+    "Three branded apps from one codebase",
+    "Multi-store marketplace with driver payouts",
+    "Shop owners manage their store from a phone"
   ]
 }
