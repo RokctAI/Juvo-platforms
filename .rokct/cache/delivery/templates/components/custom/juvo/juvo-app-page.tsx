@@ -35,6 +35,7 @@ import { Device, Display, JuvoFrame, Phone, Tablet, ThemedScreen, resolveShot, t
 import { formatBuildSize, type JuvoBuild } from "./juvo-releases";
 import { JUVO_TOUR_SIZES, isExcluded, juvoTourSrc, stepFor, type JuvoAppId, type JuvoTourStep } from "./juvo-tour";
 
+import { tx } from "@/app/lib/i18n/phrases";
 /** The steps the full tour shows: the guide's, minus the README gallery's exclusions and the page's own skips. */
 export function galleryStepsOf(page: JuvoAppPage, tour: JuvoTour): JuvoTourStep[] {
   return tour.steps.filter((s) => !isExcluded(s, tour.exclusions) && !page.gallerySkip.includes(s.slug));
@@ -46,20 +47,20 @@ function AppHero({ page, tours }: { page: JuvoAppPage; tours: JuvoTours }) {
     <section className="apphero">
       <div className="wrap">
         <div className="ah-copy">
-          <nav className="crumbs mono" aria-label="Breadcrumb">
-            <Link href="/">{JUVO_APP_COMMON.crumbs.home}</Link> <RiArrowRightSLine size={14} aria-hidden />{" "}
-            <Link href="/#apps">{JUVO_APP_COMMON.crumbs.apps}</Link> <RiArrowRightSLine size={14} aria-hidden />{" "}
-            <span aria-current="page">{page.short}</span>
+          <nav className="crumbs mono" aria-label={tx("Breadcrumb")}>
+            <Link href="/">{tx(JUVO_APP_COMMON.crumbs.home)}</Link> <RiArrowRightSLine size={14} aria-hidden />{" "}
+            <Link href="/#apps">{tx(JUVO_APP_COMMON.crumbs.apps)}</Link> <RiArrowRightSLine size={14} aria-hidden />{" "}
+            <span aria-current="page">{tx(page.short)}</span>
           </nav>
-          <span className="eyebrow mono">{page.eyebrow}</span>
+          <span className="eyebrow mono">{tx(page.eyebrow)}</span>
           <Display as="h1" text={page.title} it={page.titleIt} />
-          <p className="lede">{page.lede}</p>
+          <p className="lede">{tx(page.lede)}</p>
           <div className="ctas">
             <a className="btn btn-brand" href="#demo">
-              <RiDownload2Line size={19} aria-hidden /> {JUVO_APP_COMMON.primary}
+              <RiDownload2Line size={19} aria-hidden /> {tx(JUVO_APP_COMMON.primary)}
             </a>
             <a className="btn btn-ghost" href="#features">
-              {JUVO_APP_COMMON.secondary}
+              {tx(JUVO_APP_COMMON.secondary)}
             </a>
           </div>
         </div>
@@ -97,14 +98,14 @@ function Chapter({ chapter, n, flip, app, tours }: { chapter: JuvoChapter; n: nu
         <span className="ic">
           <JuvoGlyph name={chapter.icon} />
         </span>
-        <h3 className="display">{chapter.title}</h3>
-        <p>{chapter.text}</p>
+        <h3 className="display">{tx(chapter.title)}</h3>
+        <p>{tx(chapter.text)}</p>
         {caps.length > 0 ? (
           <ul className="ch-caps">
             {caps.map((s) => (
               <li key={s.slug}>
-                <b>{s.title}</b>
-                <span>{s.caption}</span>
+                <b>{tx(s.title)}</b>
+                <span>{tx(s.caption)}</span>
               </li>
             ))}
           </ul>
@@ -140,7 +141,7 @@ function GalleryGrid({ app, steps, device }: { app: JuvoAppId; steps: JuvoTourSt
               <Phone img={img} sizes="(max-width: 720px) 44vw, 180px" />
             )}
             <figcaption>
-              <b>{s.title}</b>
+              <b>{tx(s.title)}</b>
             </figcaption>
           </figure>
         );
@@ -158,10 +159,10 @@ function Gallery({ page, tour }: { page: JuvoAppPage; tour: JuvoTour }) {
       <div className="wrap">
         <div className="head">
           <div>
-            <span className="eyebrow mono">{c.galleryEyebrow}</span>
+            <span className="eyebrow mono">{tx(c.galleryEyebrow)}</span>
             <Display text={c.galleryTitle} it={c.galleryTitleIt} />
           </div>
-          <p>{c.galleryBody}</p>
+          <p>{tx(c.galleryBody)}</p>
         </div>
         {page.galleryTablet ? (
           <JuvoDeviceSwitch
@@ -192,8 +193,8 @@ function BuildLink({ build }: { build: JuvoBuild }) {
     <a className="dlbig" href={build.href} rel="noopener" {...(build.direct ? {} : { target: "_blank" })}>
       {build.id === "android" ? <RiAndroidLine size={28} aria-hidden /> : <RiWindowsLine size={28} aria-hidden />}
       <div>
-        <b>{words.label}</b>
-        <span>{detail}</span>
+        <b>{tx(words.label)}</b>
+        <span>{tx(detail)}</span>
       </div>
       {build.direct ? <RiDownload2Line className="go" size={20} aria-hidden /> : <RiArrowRightUpLine className="go" size={20} aria-hidden />}
     </a>
@@ -207,7 +208,7 @@ function Demo({ page, builds }: { page: JuvoAppPage; builds: JuvoBuild[] }) {
       <div className="wrap">
         <div className="talkbox demo">
           <div>
-            <span className="eyebrow mono on-night">{c.demoEyebrow}</span>
+            <span className="eyebrow mono on-night">{tx(c.demoEyebrow)}</span>
             <Display text={c.demoTitle} it={c.demoTitleIt} className="talk-title" />
             <p>{c.demoBody(page.name)}</p>
             <div className="dls">
@@ -217,26 +218,26 @@ function Demo({ page, builds }: { page: JuvoAppPage; builds: JuvoBuild[] }) {
             </div>
           </div>
           <div className="login">
-            <span className="mono">{c.signIn}</span>
+            <span className="mono">{tx(c.signIn)}</span>
             <ol className="demo-steps">
               {page.demo.steps.map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s}>{tx(s)}</li>
               ))}
             </ol>
             <div className="field">
-              <span className="flabel">{c.email}</span>
+              <span className="flabel">{tx(c.email)}</span>
               <div className="val">
-                <code>{page.demo.email}</code>
+                <code>{tx(page.demo.email)}</code>
                 <JuvoCopy value={page.demo.email} label={c.copy} done={c.copied} />
               </div>
             </div>
             <div className="field">
-              <span className="flabel">{c.password}</span>
+              <span className="flabel">{tx(c.password)}</span>
               <div className="val gap">
-                <span>{c.passwordText}</span>
+                <span>{tx(c.passwordText)}</span>
               </div>
             </div>
-            <p className="fine">{c.fine}</p>
+            <p className="fine">{tx(c.fine)}</p>
           </div>
         </div>
       </div>
@@ -248,7 +249,7 @@ function Others({ app }: { app: JuvoAppId }) {
   return (
     <section className="others-sec">
       <div className="wrap">
-        <span className="eyebrow mono">{JUVO_APP_COMMON.othersEyebrow}</span>
+        <span className="eyebrow mono">{tx(JUVO_APP_COMMON.othersEyebrow)}</span>
         <div className="others">
           {JUVO_APP_ORDER.filter((a) => a !== app).map((a) => {
             const p = JUVO_APP_PAGES[a];
@@ -258,8 +259,8 @@ function Others({ app }: { app: JuvoAppId }) {
                   <JuvoGlyph name={p.icon} />
                 </span>
                 <div>
-                  <span className="mono">{p.eyebrow}</span>
-                  <b>{p.name}</b>
+                  <span className="mono">{tx(p.eyebrow)}</span>
+                  <b>{tx(p.name)}</b>
                 </div>
                 <RiArrowRightUpLine className="go" size={22} aria-hidden />
               </Link>
@@ -283,10 +284,10 @@ export function JuvoAppPageView({ app, tours, builds }: { app: JuvoAppId; tours:
           <div className="wrap">
             <div className="head">
               <div>
-                <span className="eyebrow mono">{c.featuresEyebrow}</span>
+                <span className="eyebrow mono">{tx(c.featuresEyebrow)}</span>
                 <Display text={c.featuresTitle(page.short)} it={c.featuresTitleIt} />
               </div>
-              <p>{c.featuresBody}</p>
+              <p>{tx(c.featuresBody)}</p>
             </div>
             {page.note ? (
               <div className="note-card">
@@ -294,8 +295,8 @@ export function JuvoAppPageView({ app, tours, builds }: { app: JuvoAppId; tours:
                   <JuvoGlyph name={page.note.icon} />
                 </span>
                 <div>
-                  <b>{page.note.title}</b>
-                  <span>{page.note.text}</span>
+                  <b>{tx(page.note.title)}</b>
+                  <span>{tx(page.note.text)}</span>
                 </div>
               </div>
             ) : null}

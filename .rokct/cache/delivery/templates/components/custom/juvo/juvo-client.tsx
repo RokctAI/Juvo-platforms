@@ -39,6 +39,7 @@ import type { JuvoFlowStep, JuvoIcon, JuvoNavLink } from "./juvo-copy";
 import { JuvoGlyph } from "./juvo-icons";
 import { JuvoImg, type JuvoImage } from "./juvo-media";
 
+import { tx } from "@/app/lib/i18n/phrases";
 /** The pair's classes in the header's own design (juvo.css). */
 const AUTH_BAR = { login: "jv-auth-login", signup: "jv-auth-signup" };
 const AUTH_PANEL = { login: "jv-auth-panel-login", signup: "jv-auth-panel-signup" };
@@ -109,14 +110,14 @@ export function JuvoHeader({
         <Link className="brand" href="/" aria-label={brand.homeLabel}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={brand.mark} alt="" width={34} height={34} />
-          {brand.word} <small>{brand.small}</small>
+          {tx(brand.word)} <small>{tx(brand.small)}</small>
         </Link>
-        <nav className="menu" aria-label="Main">
+        <nav className="menu" aria-label={tx("Main")}>
           <ul>
             {nav.map((n) => (
               <li key={n.href}>
                 <Link href={n.href} aria-current={n.href === current ? "page" : undefined}>
-                  {n.label}
+                  {tx(n.label)}
                 </Link>
               </li>
             ))}
@@ -128,7 +129,7 @@ export function JuvoHeader({
             <HeaderAuthSlot variant="bar" classes={AUTH_BAR} />
           </span>
           <Link className="btn btn-brand jv-cta" href={cta.href}>
-            {cta.label} <RiArrowRightLine size={18} aria-hidden />
+            {tx(cta.label)} <RiArrowRightLine size={18} aria-hidden />
           </Link>
           <button
             type="button"
@@ -148,7 +149,7 @@ export function JuvoHeader({
             {nav.map((n) => (
               <li key={n.href}>
                 <Link href={n.href} onClick={close} aria-current={n.href === current ? "page" : undefined}>
-                  {n.label}
+                  {tx(n.label)}
                   <RiArrowRightLine size={18} aria-hidden />
                 </Link>
               </li>
@@ -259,14 +260,14 @@ export function JuvoFlow({
             <span className="pin">
               <JuvoGlyph name={s.icon} />
             </span>
-            <b>{s.title}</b>
-            <span className="d">{s.text}</span>
+            <b>{tx(s.title)}</b>
+            <span className="d">{tx(s.text)}</span>
           </button>
         ))}
       </div>
 
       <p className="stepdesc" aria-live="polite">
-        {step.text}
+        {tx(step.text)}
       </p>
 
       <div className="mtabs" role="group" aria-label={labels.lanes}>
@@ -280,7 +281,7 @@ export function JuvoFlow({
               setManualLane(k);
             }}
           >
-            {l.short}
+            {tx(l.short)}
           </button>
         ))}
       </div>
@@ -293,7 +294,7 @@ export function JuvoFlow({
           >
             <div className="who">
               <JuvoGlyph name={l.icon} />
-              {l.label}
+              {tx(l.label)}
             </div>
             <div className={l.device}>
               {l.screens.map((sc) => (
@@ -305,7 +306,7 @@ export function JuvoFlow({
                 />
               ))}
             </div>
-            <p className="cap">{step.captions[k]}</p>
+            <p className="cap">{tx(step.captions[k])}</p>
           </div>
         ))}
       </div>
@@ -322,7 +323,7 @@ export function JuvoFlow({
         <span className={playing ? "tbar run" : "tbar"} key={`${cur}-${tick}-${playing}`} style={{ ["--dur" as string]: `${STEP_MS}ms` }}>
           <i />
         </span>
-        <span className="mono">{stepLabel}</span>
+        <span className="mono">{tx(stepLabel)}</span>
       </div>
     </div>
   );
@@ -361,7 +362,7 @@ export function JuvoTabs({
             }}
           >
             <JuvoGlyph name={t.icon} />
-            {t.label}
+            {tx(t.label)}
           </button>
         ))}
       </div>
@@ -374,7 +375,7 @@ export function JuvoTabs({
           aria-labelledby={`${base}-t-${t.id}`}
           hidden={k !== on}
         >
-          {children[k]}
+          {tx(children[k])}
         </div>
       ))}
     </>
@@ -397,13 +398,13 @@ export function JuvoDeviceSwitch({
         {options.map((o, k) => (
           <button key={o.id} type="button" aria-pressed={k === on} onClick={() => setOn(k)}>
             <JuvoGlyph name={o.icon} />
-            {o.label}
+            {tx(o.label)}
           </button>
         ))}
       </div>
       {options.map((o, k) => (
         <div key={o.id} hidden={k !== on}>
-          {children[k]}
+          {tx(children[k])}
         </div>
       ))}
     </>
