@@ -40,40 +40,41 @@ import {
 import { JuvoGlyph } from "./juvo-icons";
 import { Device, Display, JuvoFrame, Phone, resolveShot, type JuvoTours } from "./juvo-parts";
 
+import { tx } from "@/app/lib/i18n/phrases";
 function Hero({ tours }: { tours: JuvoTours }) {
   const [customer, manager, driver] = JUVO_HERO.phones;
   return (
     <section className="hero">
       <div className="wrap">
         <div className="copy-a">
-          <span className="eyebrow mono">{JUVO_HERO.eyebrow}</span>
+          <span className="eyebrow mono">{tx(JUVO_HERO.eyebrow)}</span>
           <h1 className="display">
-            {JUVO_HERO.title}{" "}
+            {tx(JUVO_HERO.title)}{" "}
             <span className="it">
               {JUVO_HERO.titleParts.map((p, i) => (
                 <Fragment key={p}>
                   {i > 0 ? " " : null}
-                  <span className="nw">{p}</span>
+                  <span className="nw">{tx(p)}</span>
                 </Fragment>
               ))}
             </span>
           </h1>
         </div>
         <div className="copy-b">
-          <p className="lede">{JUVO_HERO.lede}</p>
+          <p className="lede">{tx(JUVO_HERO.lede)}</p>
           <div className="ctas">
             <Link className="btn btn-brand" href={JUVO_HERO.primary.href}>
-              {JUVO_HERO.primary.label} <RiArrowRightLine size={19} aria-hidden />
+              {tx(JUVO_HERO.primary.label)} <RiArrowRightLine size={19} aria-hidden />
             </Link>
             <Link className="btn btn-ghost" href={JUVO_HERO.secondary.href}>
-              <RiPlayCircleLine size={19} aria-hidden /> {JUVO_HERO.secondary.label}
+              <RiPlayCircleLine size={19} aria-hidden /> {tx(JUVO_HERO.secondary.label)}
             </Link>
           </div>
           <div className="trust">
             {JUVO_HERO.trust.map((t) => (
               <span key={t.text}>
                 <JuvoGlyph name={t.icon} />
-                {t.text}
+                {tx(t.text)}
               </span>
             ))}
           </div>
@@ -90,7 +91,7 @@ function Hero({ tours }: { tours: JuvoTours }) {
             {JUVO_HERO.legend.map((l) => (
               <span key={l.label}>
                 <JuvoGlyph name={l.icon} />
-                {l.label}
+                {tx(l.label)}
               </span>
             ))}
           </div>
@@ -108,7 +109,7 @@ function Ticker() {
         {run.map((t, i) => (
           <span key={`${t.label}-${i}`}>
             <JuvoGlyph name={t.icon} />
-            {t.label}
+            {tx(t.label)}
           </span>
         ))}
       </div>
@@ -132,10 +133,10 @@ function Flow({ tours }: { tours: JuvoTours }) {
       <div className="wrap">
         <div className="head">
           <div>
-            <span className="eyebrow mono">{JUVO_FLOW.eyebrow}</span>
+            <span className="eyebrow mono">{tx(JUVO_FLOW.eyebrow)}</span>
             <Display text={JUVO_FLOW.title} it={JUVO_FLOW.titleIt} end={JUVO_FLOW.titleEnd} />
           </div>
-          <p>{JUVO_FLOW.body}</p>
+          <p>{tx(JUVO_FLOW.body)}</p>
         </div>
         <JuvoFlow
           steps={JUVO_FLOW.steps}
@@ -152,9 +153,9 @@ function Panel({ panel, tours }: { panel: JuvoHomePanel; tours: JuvoTours }) {
   return (
     <>
       <div>
-        <span className="mono eyebrow">{panel.eyebrow}</span>
-        <h3 className="display panel-title">{panel.title}</h3>
-        <p className="tagl">{panel.tagline}</p>
+        <span className="mono eyebrow">{tx(panel.eyebrow)}</span>
+        <h3 className="display panel-title">{tx(panel.title)}</h3>
+        <p className="tagl">{tx(panel.tagline)}</p>
         <ul className="feat">
           {panel.features.map((f) => (
             <li key={f.title}>
@@ -162,8 +163,8 @@ function Panel({ panel, tours }: { panel: JuvoHomePanel; tours: JuvoTours }) {
                 <JuvoGlyph name={f.icon} />
               </span>
               <div>
-                <b>{f.title}</b>
-                <span>{f.text}</span>
+                <b>{tx(f.title)}</b>
+                <span>{tx(f.text)}</span>
               </div>
             </li>
           ))}
@@ -174,7 +175,7 @@ function Panel({ panel, tours }: { panel: JuvoHomePanel; tours: JuvoTours }) {
           </Link>
           <Link href={`${href}#demo`}>
             <RiDownload2Line size={18} aria-hidden />
-            {JUVO_APPS_SECTION.demo}
+            {tx(JUVO_APPS_SECTION.demo)}
           </Link>
         </div>
       </div>
@@ -183,8 +184,8 @@ function Panel({ panel, tours }: { panel: JuvoHomePanel; tours: JuvoTours }) {
           <figure key={s.title}>
             <Device tours={tours} shot={s.shots[0]} sizes="(max-width: 900px) 46vw, 240px" />
             <figcaption>
-              <b>{s.title}</b>
-              {s.text}
+              <b>{tx(s.title)}</b>
+              {tx(s.text)}
             </figcaption>
           </figure>
         ))}
@@ -200,10 +201,10 @@ function Apps({ tours }: { tours: JuvoTours }) {
       <div className="wrap">
         <div className="head">
           <div>
-            <span className="eyebrow mono">{JUVO_APPS_SECTION.eyebrow}</span>
+            <span className="eyebrow mono">{tx(JUVO_APPS_SECTION.eyebrow)}</span>
             <Display text={JUVO_APPS_SECTION.title} it={JUVO_APPS_SECTION.titleIt} />
           </div>
-          <p>{JUVO_APPS_SECTION.body}</p>
+          <p>{tx(JUVO_APPS_SECTION.body)}</p>
         </div>
         <JuvoTabs label={JUVO_APPS_SECTION.tabsLabel} tabs={panels.map((p) => ({ id: p.app, label: p.tab, icon: p.icon }))}>
           {panels.map((p) => (
@@ -224,20 +225,20 @@ function Story({ tours }: { tours: JuvoTours }) {
           {JUVO_STORY.callouts.map((c, i) => (
             <div key={c.label} className={`callout c${i + 1}`}>
               <JuvoGlyph name={c.icon} />
-              {c.label}
+              {tx(c.label)}
             </div>
           ))}
         </div>
         <div>
-          <span className="eyebrow mono">{JUVO_STORY.eyebrow}</span>
+          <span className="eyebrow mono">{tx(JUVO_STORY.eyebrow)}</span>
           <Display text={JUVO_STORY.title} it={JUVO_STORY.titleIt} />
-          <p className="sub">{JUVO_STORY.body}</p>
+          <p className="sub">{tx(JUVO_STORY.body)}</p>
           <ol className="steps">
             {JUVO_STORY.steps.map((s) => (
               <li key={s.title}>
                 <div>
-                  <b>{s.title}</b>
-                  <span>{s.text}</span>
+                  <b>{tx(s.title)}</b>
+                  <span>{tx(s.text)}</span>
                 </div>
               </li>
             ))}
@@ -255,23 +256,23 @@ function Included({ tours }: { tours: JuvoTours }) {
       <div className="wrap">
         <div className="head">
           <div>
-            <span className="eyebrow mono">{inc.eyebrow}</span>
+            <span className="eyebrow mono">{tx(inc.eyebrow)}</span>
             <Display text={inc.title} it={inc.titleIt} />
           </div>
-          <p>{inc.body}</p>
+          <p>{tx(inc.body)}</p>
         </div>
         <div className="bento">
           <div className="tile t-apps">
             <span className="ic">
               <JuvoGlyph name={inc.apps.icon} />
             </span>
-            <h4>{inc.apps.title}</h4>
-            <p>{inc.apps.text}</p>
+            <h4>{tx(inc.apps.title)}</h4>
+            <p>{tx(inc.apps.text)}</p>
             <div className="minis">
               {inc.apps.minis.map((m) => (
                 <div key={m.label}>
                   <Phone img={resolveShot(tours, m.shot)} sizes="(max-width: 720px) 28vw, 170px" />
-                  <div className="lbl mono">{m.label}</div>
+                  <div className="lbl mono">{tx(m.label)}</div>
                 </div>
               ))}
             </div>
@@ -280,12 +281,12 @@ function Included({ tours }: { tours: JuvoTours }) {
             <span className="ic">
               <JuvoGlyph name={inc.erp.icon} />
             </span>
-            <h4>{inc.erp.title}</h4>
-            <p>{inc.erp.text}</p>
+            <h4>{tx(inc.erp.title)}</h4>
+            <p>{tx(inc.erp.text)}</p>
             <div className="stack">
               {inc.erp.stack.map((s) => (
                 <div key={s.label}>
-                  {s.label} <JuvoGlyph name={s.icon} />
+                  {tx(s.label)} <JuvoGlyph name={s.icon} />
                 </div>
               ))}
             </div>
@@ -295,19 +296,19 @@ function Included({ tours }: { tours: JuvoTours }) {
               <span className="ic">
                 <JuvoGlyph name={t.icon} />
               </span>
-              <h4>{t.title}</h4>
-              <p>{t.text}</p>
+              <h4>{tx(t.title)}</h4>
+              <p>{tx(t.text)}</p>
             </div>
           ))}
           <div className="tile span3">
             <span className="ic">
               <JuvoGlyph name={inc.details.icon} />
             </span>
-            <h4>{inc.details.title}</h4>
-            <p>{inc.details.text}</p>
+            <h4>{tx(inc.details.title)}</h4>
+            <p>{tx(inc.details.text)}</p>
             <div className="chips">
               {inc.details.chips.map((c) => (
-                <span key={c}>{c}</span>
+                <span key={c}>{tx(c)}</span>
               ))}
             </div>
           </div>
@@ -317,8 +318,8 @@ function Included({ tours }: { tours: JuvoTours }) {
             <div key={u.title} className="use">
               <Phone img={resolveShot(tours, u.shot)} sizes="96px" />
               <div>
-                <b>{u.title}</b>
-                <span>{u.text}</span>
+                <b>{tx(u.title)}</b>
+                <span>{tx(u.text)}</span>
               </div>
             </div>
           ))}
@@ -335,15 +336,15 @@ function Closing() {
       <div className="wrap">
         <div className="talkbox">
           <div>
-            <span className="eyebrow mono on-night">{c.eyebrow}</span>
+            <span className="eyebrow mono on-night">{tx(c.eyebrow)}</span>
             <Display text={c.title} it={c.titleIt} className="talk-title" />
-            <p>{c.body}</p>
+            <p>{tx(c.body)}</p>
             <div className="talk-ctas">
               <Link className="btn btn-brand" href={c.primary.href}>
-                {c.primary.label} <RiArrowRightLine size={19} aria-hidden />
+                {tx(c.primary.label)} <RiArrowRightLine size={19} aria-hidden />
               </Link>
               <Link className="btn btn-ghost" href={c.secondary.href}>
-                {c.secondary.label}
+                {tx(c.secondary.label)}
               </Link>
             </div>
           </div>
@@ -352,8 +353,8 @@ function Closing() {
               <div key={f.title} className="fact">
                 <JuvoGlyph name={f.icon} />
                 <div>
-                  <b>{f.title}</b>
-                  <span>{f.text}</span>
+                  <b>{tx(f.title)}</b>
+                  <span>{tx(f.text)}</span>
                 </div>
               </div>
             ))}

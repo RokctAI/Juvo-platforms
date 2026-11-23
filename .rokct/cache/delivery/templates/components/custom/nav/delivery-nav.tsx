@@ -46,6 +46,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
+import { tx } from "@/app/lib/i18n/phrases";
 const deliveryMenuItems = [
   {
     title: t("nav.delivery.dashboard"),
@@ -85,7 +86,7 @@ export function DeliveryNav() {
             >
               <Link href={item.url}>
                 {item.icon && <item.icon />}
-                {item.title}
+                {tx(item.title)}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

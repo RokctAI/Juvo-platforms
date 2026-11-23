@@ -43,6 +43,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
+import { tx } from "@/app/lib/i18n/phrases";
 const deliveryAdminMenuItems = [
   {
     title: "Location types",
@@ -56,7 +57,7 @@ export function DeliveryAdminNav() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Places and rounds</SidebarGroupLabel>
+      <SidebarGroupLabel>{tx("Places and rounds")}</SidebarGroupLabel>
       <SidebarMenu>
         {deliveryAdminMenuItems.map((item) => (
           <SidebarMenuItem key={item.title}>
@@ -67,7 +68,7 @@ export function DeliveryAdminNav() {
             >
               <Link href={item.url}>
                 {item.icon && <item.icon />}
-                {item.title}
+                {tx(item.title)}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

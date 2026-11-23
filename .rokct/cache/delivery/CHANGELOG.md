@@ -1,4 +1,8 @@
 # Changelog
+## 1.4.0
+
+- feat(i18n): the Juvo landing, app and auth pages read in Afrikaans when the visitor picks AF, through base_sdk 1.66.0's `tx()` and the new copy file `app/lib/i18n/sdk/delivery.json` (`af.__phrases`). Machine-drafted Afrikaans; needs a fluent skim.
+
 ## 1.3.1
 
 - Landing sections rise and fade in as they scroll into view (CSS scroll-driven, no JS, off under reduced motion).

@@ -54,6 +54,7 @@ import {
 import { DELIVERY_PAGE_SECTIONS } from "@/components/custom/landing/delivery-page-sections";
 import type { PageSectionMeta } from "@/components/custom/landing/page-sections";
 
+import { tx } from "@/app/lib/i18n/phrases";
 /** The glyph beside each button: a phone for the phone builds, a monitor for the desktop one. */
 const BUILD_GLYPHS: Record<DeliveryAppBuild["id"], RemixiconComponentType> = {
   android: RiSmartphoneLine,
@@ -83,12 +84,12 @@ function TryItBlock({
       data-testid="delivery-try-it"
       className="flex flex-col gap-2 rounded-xl border border-dashed border-zinc-300 p-4 dark:border-zinc-700"
     >
-      <p className="text-sm font-semibold text-zinc-900 dark:text-white">{labels.tryIt}</p>
+      <p className="text-sm font-semibold text-zinc-900 dark:text-white">{tx(labels.tryIt)}</p>
       <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
         {rows.map(([term, value]) => (
           <React.Fragment key={term}>
-            <dt className="text-zinc-600 dark:text-zinc-400">{term}</dt>
-            <dd className="break-all font-mono text-zinc-900 dark:text-white">{value}</dd>
+            <dt className="text-zinc-600 dark:text-zinc-400">{tx(term)}</dt>
+            <dd className="break-all font-mono text-zinc-900 dark:text-white">{tx(value)}</dd>
           </React.Fragment>
         ))}
       </dl>
@@ -106,10 +107,10 @@ export function DeliveryAppsSection({ id }: { id?: string }) {
       <div className="container mx-auto flex max-w-6xl flex-col gap-12 px-4 xl:px-0">
         <div className="flex flex-col items-center gap-5 text-center">
           <h2 className="text-balance text-[32px] font-extrabold leading-[1.1] tracking-tight text-zinc-900 dark:text-white md:text-[48px]">
-            {config.heading}
+            {tx(config.heading)}
           </h2>
           <p className="max-w-2xl text-lg font-medium text-zinc-600 dark:text-zinc-400 md:text-xl">
-            {config.blurb}
+            {tx(config.blurb)}
           </p>
         </div>
 
@@ -124,11 +125,11 @@ export function DeliveryAppsSection({ id }: { id?: string }) {
               >
                 <div className="flex flex-col gap-2">
                   <span className="text-xs font-semibold uppercase tracking-wide text-primary">
-                    {app.name}
+                    {tx(app.name)}
                   </span>
-                  <h3 className="text-lg font-bold text-zinc-900 dark:text-white">{app.label}</h3>
+                  <h3 className="text-lg font-bold text-zinc-900 dark:text-white">{tx(app.label)}</h3>
                   <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    {app.description}
+                    {tx(app.description)}
                   </p>
                 </div>
 
@@ -145,10 +146,10 @@ export function DeliveryAppsSection({ id }: { id?: string }) {
                           className={index === 0 ? PRIMARY_BUTTON : OUTLINED_BUTTON}
                         >
                           <Glyph aria-hidden="true" className="size-4" />
-                          {build.label}
+                          {tx(build.label)}
                         </a>
                         <span className="text-xs text-zinc-600 dark:text-zinc-400">
-                          {build.description}
+                          {tx(build.description)}
                         </span>
                       </li>
                     );

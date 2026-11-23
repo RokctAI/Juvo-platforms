@@ -34,6 +34,7 @@ import type { JuvoTour } from "./juvo-load";
 import { JuvoImg, type JuvoImage } from "./juvo-media";
 import { JUVO_TOUR_SIZES, juvoTourSrc, stepFor, type JuvoAppId } from "./juvo-tour";
 
+import { tx } from "@/app/lib/i18n/phrases";
 export type JuvoTours = Partial<Record<JuvoAppId, JuvoTour>>;
 
 /** A shot as a picture, or null when today's tour has no such step. */
@@ -129,7 +130,7 @@ export function Display({
 }) {
   return (
     <Tag className={className ? `display ${className}` : "display"}>
-      {text} <span className="it">{it}</span>
+      {tx(text)} <span className="it">{tx(it)}</span>
       {end ? ` ${end}` : null}
     </Tag>
   );
@@ -139,10 +140,10 @@ export function JuvoFooter() {
   return (
     <footer className="foot">
       <div className="wrap">
-        <nav aria-label="Footer">
+        <nav aria-label={tx("Footer")}>
           {JUVO_FOOTER.nav.map((n) => (
             <a key={n.href} href={n.href}>
-              {n.label}
+              {tx(n.label)}
             </a>
           ))}
         </nav>
@@ -157,7 +158,7 @@ export function JuvoFrame({ current, children }: { current?: string; children: R
   return (
     <div className={`jv ${juvoFontClassName}`}>
       <a className="skip" href="#main">
-        Skip to content
+        {tx("Skip to content")}
       </a>
       <JuvoHeader brand={JUVO_BRAND} nav={JUVO_NAV} current={current} labels={JUVO_HEADER} cta={JUVO_HEADER.cta} />
       <main id="main">{children}</main>

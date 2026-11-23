@@ -45,6 +45,7 @@ import Link from "next/link";
 import type { HeroFormProps } from "@/components/custom/landing/hero-form";
 import { LANDING_CONFIG } from "@/components/custom/landing/landing-config";
 
+import { tx } from "@/app/lib/i18n/phrases";
 const PRICING_SECTION_ID = "pricing";
 const PRICING_ANCHOR = `#${PRICING_SECTION_ID}`;
 
@@ -71,14 +72,14 @@ export default function DeliveryHeroForm({ hero, nav }: HeroFormProps) {
       <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
         {hasPricing && (
           <a href={PRICING_ANCHOR} className={PRIMARY_CLASS}>
-            See pricing
+            {tx("See pricing")}
           </a>
         )}
         <Link
           href={LANDING_CONFIG.loginUrl}
           className={hasPricing ? SECONDARY_CLASS : PRIMARY_CLASS}
         >
-          Log in to your portal
+          {tx("Log in to your portal")}
         </Link>
       </div>
 

@@ -42,7 +42,7 @@ MANIFEST = os.path.join(SDK_ROOT, "manifest.json")
 CHANGELOG = os.path.join(SDK_ROOT, "CHANGELOG.md")
 TEMPLATES = os.path.join(SDK_ROOT, "templates")
 
-VERSION = "1.3.1"
+VERSION = "1.4.0"
 
 ACTIONS = "templates/app/actions/delivery/admin/location-types.ts"
 PAGE = "templates/app/admin/logistics/location-types/page.tsx"
